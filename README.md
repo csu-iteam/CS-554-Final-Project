@@ -1,1 +1,1 @@
-Here is the homepage development branch.
+Here is the Procratinators final project.
