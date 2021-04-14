@@ -15,6 +15,11 @@ function App() {
           <Link className="showlink" to="/">
             Home
           </Link>
+          {/* TODO: when user logged in, display profile button and log out button. 
+          Otherwise, display log in button without profile button */}
+          {/* <Link className="showlink" to="/profile">
+            Profile
+          </Link> */}
           <Link className="showlink" to="/login">
             Log in
           </Link>
