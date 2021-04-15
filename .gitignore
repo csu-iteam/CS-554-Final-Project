@@ -1,2 +1,6 @@
-/node_modules/
-/package-lock.json
+# /client-side/node_modules/
+# /client-side/package-lock.json
+
+# Dependency directory
+node_modules
+package-lock.json
