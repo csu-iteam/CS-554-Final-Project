@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Card, CardContent, CardMedia, Typography, CardHeader } from '@material-ui/core';
 import axios from 'axios';
@@ -36,27 +36,29 @@ const useStyles = makeStyles({ //TODO: should be modified
 const Home = () => {
 
     const [user, setUser] = useState({});
-    async function fetchData() {
-        try {
-            const { data } = await axios.get('http://localhost:3008/users',
-                { headers: { Accept: 'application/json' } });
-            console.log(user);
-            console.log(data);
-            if (user !== data) {
-                console.log(1)
-                // setUser(data);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
-    fetchData();
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const { data } = await axios.get('http://localhost:3008/users',
+                    { headers: { Accept: 'application/json' } });
+                console.log(user);
+                console.log(data);
+                setUser(data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchData();
+    }, []
+    );
+
 
     return (
         <div>
             <p>Hello</p>
-            {/* <p>{user.firstName}</p> */}
+            <p>{user[0].firstName}</p>
         </div>
     );
 };
