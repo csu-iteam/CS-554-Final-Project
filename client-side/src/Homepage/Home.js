@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Card, CardContent, CardMedia, Typography, CardHeader } from '@material-ui/core';
 import axios from 'axios';
+import HomeTypeListButton from './HomeTypeListButton';
 import '../App.css';
 
 const useStyles = makeStyles({ //TODO: should be modified
@@ -37,6 +38,7 @@ const Home = () => {
 
     const [user, setUser] = useState({});
 
+    //get data from database
     useEffect(() => {
         async function fetchData() {
             try {
@@ -54,12 +56,21 @@ const Home = () => {
     }, []
     );
 
+    // //add scripts 
+    // useEffect(() => {
+    //     const script = document.createElement('script');
+    //     script.src = "/scripts/homepage.js";
+    //     script.async = true;
+    //     document.body.appendChild(script);
+    //     return () => {
+    //         document.body.removeChild(script);
+    //     }
+    // }, []);
 
     return (
         <div>
-            <p>Hello</p>
-            <p>{user[0].firstName}</p>
-        </div>
+            <HomeTypeListButton />
+        </div >
     );
 };
 
