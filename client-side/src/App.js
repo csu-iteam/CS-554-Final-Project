@@ -28,6 +28,9 @@ function App() {
         <br />
         <div className="App-body">
           <Route exact path="/" component={Home} />
+          {/* <Route exact path="/post/:_id" component={SinglePost} /> */} 
+          {/*  Recommend using this path above, otherwise Homepage need to change some link href. 
+          SinglePost is just an example component name, you can rename to anything you like*/}
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
         </div>
