@@ -8,11 +8,11 @@ const exportedMethods = {
     const postCollection = await posts();
     return await postCollection.find({}).toArray();
   },
-  async getPostsByTag(tag) {
-    if (!tag) throw 'No tag provided';
+  async getPostsByTag(type) {
+    if (!type) throw 'No type provided';
 
     const postCollection = await posts();
-    return await postCollection.find({ tags: tag }).toArray();
+    return await postCollection.find({ types: type }).toArray();
   },
   async getPostById(id) {
     const postCollection = await posts();
@@ -21,12 +21,13 @@ const exportedMethods = {
     if (!post) throw 'Post not found';
     return post;
   },
-  async addPost(title, body, tags, posterId) {
-    if (typeof title !== 'string') throw 'No title provided';
-    if (typeof body !== 'string') throw 'I aint got nobody!';
+  async addPost(title, body, price, types, posterId) {
+    if (typeof title !== 'string') throw 'No title provided!';
+    if (typeof body !== 'string') throw 'No body provided!';
+    if(typeof price !== 'string') throw 'No price provided!';
 
-    if (!Array.isArray(tags)) {
-      tags = [];
+    if (!Array.isArray(types)) { //TODO: the value type of 'type' is not decided yet, this is just a demo
+      types = [];
     }
 
     const postCollection = await posts();
@@ -36,11 +37,12 @@ const exportedMethods = {
     const newPost = {
       title: title,
       body: body,
+      price: price,
       poster: {
         id: posterId,
         name: `${userThatPosted.firstName} ${userThatPosted.lastName}`
       },
-      tags: tags,
+      types: types,
       _id: uuid()
     };
 
@@ -51,6 +53,7 @@ const exportedMethods = {
 
     return await this.getPostById(newId);
   },
+  
   async removePost(id) {
     const postCollection = await posts();
     let post = null;
@@ -67,13 +70,14 @@ const exportedMethods = {
     await users.removePostFromUser(post.poster.id, id);
     return true;
   },
+
   async updatePost(id, updatedPost) {
     const postCollection = await posts();
 
     const updatedPostData = {};
 
-    if (updatedPost.tags) {
-      updatedPostData.tags = updatedPost.tags;
+    if (updatedPost.types) {
+      updatedPostData.types = updatedPost.types;
     }
 
     if (updatedPost.title) {
@@ -84,30 +88,35 @@ const exportedMethods = {
       updatedPostData.body = updatedPost.body;
     }
 
+    if (updatedPost.price) {
+      updatedPostData.price = updatedPost.price;
+    }
+
     await postCollection.updateOne({ _id: id }, { $set: updatedPostData });
 
     return await this.getPostById(id);
   },
-  async renameTag(oldTag, newTag) {
-    if (oldTag === newTag) throw 'tags are the same';
-    let findDocuments = {
-      tags: oldTag
-    };
 
-    let firstUpdate = {
-      $addToSet: { tags: newTag }
-    };
+  // async renameTag(oldTag, newTag) {  //TODO:should be modified
+  //   if (oldTag === newTag) throw 'tags are the same';
+  //   let findDocuments = {
+  //     tags: oldTag
+  //   };
 
-    let secondUpdate = {
-      $pull: { tags: oldTag }
-    };
+  //   let firstUpdate = {
+  //     $addToSet: { tags: newTag }
+  //   };
 
-    const postCollection = await posts();
-    await postCollection.updateMany(findDocuments, firstUpdate);
-    await postCollection.updateMany(findDocuments, secondUpdate);
+  //   let secondUpdate = {
+  //     $pull: { tags: oldTag }
+  //   };
 
-    return await this.getPostsByTag(newTag);
-  }
+  //   const postCollection = await posts();
+  //   await postCollection.updateMany(findDocuments, firstUpdate);
+  //   await postCollection.updateMany(findDocuments, secondUpdate);
+
+  //   return await this.getPostsByTag(newTag);
+  // }
 };
 
 module.exports = exportedMethods;

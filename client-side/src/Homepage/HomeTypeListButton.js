@@ -8,7 +8,7 @@ const HomeTypeListButton = () => {
     const handleChange = (e) => {
         setType(e.target.value);
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = (e) => {  //TODO: function not complete yet
         e.preventDefault();
         alert('Your choice: ' + type);
     }
@@ -21,6 +21,7 @@ const HomeTypeListButton = () => {
                     <option value="furniture">furniture</option>
                     <option value="digital product">digital product</option>
                     <option value="currency exchange">currency exchange</option>
+                    <option value="bicycle">bicycle</option>
                 </select>
                 <input type="submit" value="submit" />
             </form>
