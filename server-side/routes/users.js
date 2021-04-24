@@ -21,32 +21,66 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+// Register Done
+router.post('/register', async (req, res) => {
   let userInfo = req.body;
 
   if (!userInfo) {
-    res.status(400).json({ error: 'You must provide data to create a user' });
+    res.status(400).json({ error: 'You must provide data to create a account' });
     return;
   }
 
-  if (!userInfo.firstName) {
-    res.status(400).json({ error: 'You must provide a first name' });
+  if (!userInfo.username) {
+    res.status(400).json({ error: 'You must provide the username' });
     return;
   }
 
-  if (!userInfo.lastName) {
-    res.status(400).json({ error: 'You must provide a last name' });
+  if (!userInfo.email) {
+    res.status(400).json({ error: 'You must provide the email address' });
+    return;
+  }
+
+  if (!userInfo.password) {
+    res.status(400).json({ error: 'You must provide the password' });
     return;
   }
 
   try {
     const newUser = await userData.addUser(
-      userInfo.firstName,
-      userInfo.lastName
+      userInfo.username,
+      userInfo.email,
+      userInfo.password
     );
     res.json(newUser);
   } catch (e) {
     res.sendStatus(500);
+  }
+});
+
+//Login Done
+router.post('/login', async (req, res) => {
+  let userInfo = req.body;
+
+  if (!userInfo) {
+    res.status(400).json({ error: 'You must provide data to create a account' });
+    return;
+  }
+
+  if (!userInfo.email) {
+    res.status(400).json({ error: 'You must provide the email address' });
+    return;
+  }
+
+  if (!userInfo.password) {
+    res.status(400).json({ error: 'You must provide the password' });
+    return;
+  }
+
+  try {
+    let user = await userData.getUserByEmailAndPassword(userInfo.email, userInfo.password);
+    res.json(user);
+  } catch (e) {
+    res.status(404).json({ error: 'User not found' });
   }
 });
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import '../App.css';
 
 class Register extends Component {
@@ -22,6 +23,7 @@ class Register extends Component {
         let passwordError = document.getElementById('passwordError');
         let passwordConfirmation = document.getElementById('passwordConfirmation');
         let passwordConfirmationError = document.getElementById('passwordConfirmationError');
+        e.preventDefault();
         if (!username.value || isNullCheck.test(username.value)) {
             usernameError.hidden = false;
             usernameError.innerHTML = 'Please enter valid username.';
@@ -55,9 +57,21 @@ class Register extends Component {
         } else {
             passwordConfirmationError.hidden = true;
         }
+        
         if (usernameError.hidden === true && emailError.hidden === true && passwordError.hidden === true && passwordConfirmationError.hidden === true) {
-            e.preventDefault();
-            console.log(this.state);
+            axios.post('http://localhost:3008/users/register', {
+                "username": username.value,
+                "email": email.value,
+                "password": password.value
+            })
+            .then(function (response) {
+                console.log("response: ", response);
+                if(response.status === 200){
+                    alert('Congratulations, successful registration!');
+                    window.location.href = "/login";
+                }
+            })
+            .catch(err => console.log(err))
         }
     }
 
