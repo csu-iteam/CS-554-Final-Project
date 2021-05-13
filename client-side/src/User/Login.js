@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import cookie from 'react-cookies'
 import '../App.css';
 
 
@@ -8,6 +10,15 @@ class Login extends Component {
         email: '',
         password: ''
     };
+
+    componentWillMount(){
+        var cookie_email= cookie.load('cookie_email');
+        var cookie_password = cookie.load('cookie_password');
+        if(cookie_email && cookie_password){
+            this.state.email = cookie_email;
+            this.state.password = cookie_password;
+        }
+    }
 
     handleSubmit = async e => {
         <script type="text/javascript"></script>
@@ -18,12 +29,14 @@ class Login extends Component {
         let emailError = document.getElementById('emailError');
         let password = document.getElementById('password');
         let passwordError = document.getElementById('passwordError');
+
+        e.preventDefault();
         if (!email.value || isNullCheck.test(email.value) || !reEmail.test(email.value)) {
             emailError.hidden = false;
             emailError.innerHTML = 'Please enter valid email address.';
         } else if (email.value.split("@")[1] !== "stevens.edu") {
             emailError.hidden = false;
-            emailError.innerHTML = 'Please register account with stevens email.';
+            emailError.innerHTML = 'Please login with stevens email.';
         } else {
             emailError.hidden = true;
         }
@@ -35,8 +48,23 @@ class Login extends Component {
             passwordError.hidden = true;
         }
         if(emailError.hidden === true && passwordError.hidden === true){
-        e.preventDefault();
-        console.log(this.state);
+            axios.post('http://localhost:3008/users/login', {
+                "email": email.value,
+                "password": password.value
+            })
+            .then(function (response) {
+                if(response.status === 200){
+                    alert('Login successful.');
+                    //Set cookie
+                    let inFifteenMinutes = new Date(new Date().getTime() + 20 * 1000);
+                    cookie.save('cookie_email', email.value, { expires: inFifteenMinutes });
+                    cookie.save('cookie_password', password.value, { expires: inFifteenMinutes });
+                    cookie.save('current_email', email.value);
+                    
+                    window.location.href = "/";
+                }
+            })
+            .catch(err => alert('Email or password is not correct.'))
         }
     }
 
@@ -45,6 +73,7 @@ class Login extends Component {
             [e.target.name]: e.target.value
         });
     };
+
     render() {
         const { email, password } = this.state;
         return (

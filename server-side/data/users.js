@@ -9,27 +9,30 @@ let exportedMethods = {
     if (!userList) throw 'No users in system!';
     return userList;
   },
-  // This is a fun new syntax that was brought forth in ES6, where we can define
-  // methods on an object with this shorthand!
-  async getUserById(id) {
+
+  //Done
+  async getUserByEmailAndPassword(email, password) {
     const userCollection = await users();
-    const user = await userCollection.findOne({ _id: id });
+    const user = await userCollection.findOne({ email: email, password: password });
     if (!user) throw 'User not found';
     return user;
   },
-  async addUser(firstName, lastName) {
-    const userCollection = await users();
 
+  //Done
+  async addUser(username, email, password) {
+    const userCollection = await users();
+    posts = [];
     let newUser = {
-      firstName: firstName,
-      lastName: lastName,
+      username: username,
+      email: email,
+      password: password,
       _id: uuid(),
-      posts: []
+      posts: posts
     };
 
     const newInsertInformation = await userCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
-    return await this.getUserById(newInsertInformation.insertedId);
+    return;
   },
   async removeUser(id) {
     const userCollection = await users();
@@ -41,7 +44,6 @@ let exportedMethods = {
   },
   async updateUser(id, updatedUser) {
     const user = await this.getUserById(id);
-    console.log(user);
 
     let userUpdateInfo = {
       firstName: updatedUser.firstName,
@@ -60,7 +62,6 @@ let exportedMethods = {
   },
   async addPostToUser(userId, postId, postTitle) {
     let currentUser = await this.getUserById(userId);
-    console.log(currentUser);
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
@@ -75,7 +76,6 @@ let exportedMethods = {
   },
   async removePostFromUser(userId, postId) {
     let currentUser = await this.getUserById(userId);
-    console.log(currentUser);
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
