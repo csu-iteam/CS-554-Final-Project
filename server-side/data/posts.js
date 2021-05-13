@@ -8,9 +8,8 @@ const exportedMethods = {
     const postCollection = await posts();
     return await postCollection.find({}).toArray();
   },
-  async getPostsByTag(type) {
+  async getPostsByType(type) {
     if (!type) throw 'No type provided';
-
     const postCollection = await posts();
     return await postCollection.find({ types: type }).toArray();
   },

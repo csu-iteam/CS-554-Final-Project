@@ -45,6 +45,15 @@ async function main() {
     id
   );
 
+  await posts.addPost(
+    'Test double type',
+    `test
+     `,
+    'test',
+    ['digital product','furniture'],
+    id
+  );
+
   console.log('Done seeding database');
 
   await db.serverConfig.close();

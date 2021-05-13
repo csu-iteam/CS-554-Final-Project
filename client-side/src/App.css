@@ -22,10 +22,9 @@ input {
 }
 
 .App-header {
-	background-color: #178577;
-	height: 100px;
+	background-color: #336699;
 	padding: 20px;
-	color: #222;
+	color: #CCFF99;
 }
 
 .App-title {
@@ -70,7 +69,7 @@ col-md-4 {
 
 .showlink:hover {
 	background-color: transparent;
-	color: rgb(212, 20, 20);
+	color: #CCFF99;
 	border: 2px solid white;
 }
 
@@ -130,6 +129,6 @@ dd {
 }
 
 .error {
-	color: red;
+	color: #CC0033;
 	font-weight: bold;
 }
