@@ -3,7 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const postData = data.posts;
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => { //modified by Jingwei
   try {
     const post = await postData.getPostById(req.params.id);
     res.json(post);
@@ -12,12 +12,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.get('/tag/:tag', async (req, res) => {
-  const postList = await postData.getPostsByTag(req.params.tag);
+router.get('/type/:type', async (req, res) => { //modified by Jingwei
+  const postList = await postData.getPostsByType(req.params.type);
   res.json(postList);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) => { //modified by Jingwei
   try {
     const postList = await postData.getAllPosts();
     res.json(postList);
@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res) => { 
   const blogPostData = req.body;
   if (!blogPostData.title) {
     res.status(400).json({ error: 'You must provide blog post title' });

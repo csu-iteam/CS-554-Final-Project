@@ -1,17 +1,18 @@
 import Login from './User/Login';
 import Register from './User/Register';
-import Home from './Homepage/Home';
+import Home from './Component/Home';
 import './App.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <header className="App-header">
-          <h2>
+          <h1>
             Secondary Market
-        </h2>
+        </h1>
           <Link className="showlink" to="/">
             Home
           </Link>
