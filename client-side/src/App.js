@@ -1,6 +1,6 @@
 import Login from './User/Login';
 import Register from './User/Register';
-import Home from './Component/Home';
+import Home from './Components/Home';
 import Profile from './User/Profile';
 import './App.css';
 import { useState, useEffect } from 'react';
