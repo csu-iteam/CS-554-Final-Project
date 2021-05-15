@@ -1,6 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const uuid = require('uuid/v4');
+const ObjectId = require('mongodb').ObjectID;
 
 let exportedMethods = {
   async getAllUsers() {
@@ -34,6 +35,34 @@ let exportedMethods = {
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
     return;
   },
+
+    //(done)
+async getUserByEmail(useremail){
+  if (typeof useremail != "string") {
+    throw "the email typy is error.";
+  }
+  const userCollection = await users();
+  const user = await userCollection.findOne({ email: useremail });
+  if (user === null) {
+    throw "The user is not exist.";
+  }
+  return user;
+},
+
+  // get user by ID  (done) 
+async getUserById(id) {
+  if (typeof id != "string") {
+    throw "the id typy is error.";
+  }
+  const userCollection = await users();
+  const user = await userCollection.findOne({ _id: id });
+  if (user === null) {
+    throw "The user is not exist.";
+  }
+  return user;
+},
+
+
   async removeUser(id) {
     const userCollection = await users();
     const deletionInfo = await userCollection.removeOne({ _id: id });
@@ -60,33 +89,34 @@ let exportedMethods = {
 
     return await this.getUserById(id);
   },
-  async addPostToUser(userId, postId, postTitle) {
-    let currentUser = await this.getUserById(userId);
+  //  add post for user  (done) 
+  async addPostToUser(userId, postId) {
 
+    let userInfo = await this.getUserById(userId);
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
-      { _id: userId },
-      { $addToSet: { posts: { id: postId, title: postTitle } } }
+      {_id: userId},
+      {$addToSet: {posts: ObjectId(postId)} }
     );
-
-    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
-      throw 'Update failed';
-
+    if(!updateInfo.matchedCount && !updateInfo.modifiedCount){
+      throw "Update failed";
+    }
     return await this.getUserById(userId);
   },
+
+  //(done) remove user from post
   async removePostFromUser(userId, postId) {
     let currentUser = await this.getUserById(userId);
 
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
       { _id: userId },
-      { $pull: { posts: { id: postId } } }
+      { $pull: { posts: ObjectId(postId)} }
     );
-    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount){
       throw 'Update failed';
-
-    return await this.getUserById(userId);
+    }
   }
-};
+}
 
 module.exports = exportedMethods;
