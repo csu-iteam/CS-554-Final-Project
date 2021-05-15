@@ -3,7 +3,8 @@ const router = express.Router();
 const data = require('../data');
 const postData = data.posts;
 
-router.get('/:id', async (req, res) => { //modified by Jingwei
+//Show the single post with id   (done)
+router.get('/:id', async (req, res) => {
   try {
     const post = await postData.getPostById(req.params.id);
     res.json(post);
@@ -12,12 +13,14 @@ router.get('/:id', async (req, res) => { //modified by Jingwei
   }
 });
 
-router.get('/type/:type', async (req, res) => { //modified by Jingwei
-  const postList = await postData.getPostsByType(req.params.type);
+//show the list of posts with tag  (done)
+router.get('/tag/:tag', async (req, res) => {
+  const postList = await postData.getPostsByTag(req.params.tag);
   res.json(postList);
 });
 
-router.get('/', async (req, res) => { //modified by Jingwei
+//show all of the posts  (done)
+router.get('/', async (req, res) => {
   try {
     const postList = await postData.getAllPosts();
     res.json(postList);
@@ -26,28 +29,106 @@ router.get('/', async (req, res) => { //modified by Jingwei
   }
 });
 
-router.post('/', async (req, res) => { 
+//show all of the posts by username (done)
+router.get('/getpostbyuser/:username', async(req, res) =>{
+  try{
+    const postList = await postData.getPostsByUser(req.params.username);
+    
+    res.json(postList);
+  }catch(e){
+    res.status(500).json({error: e});
+  }
+});
+
+//  get post by email  (done)
+router.get('/getpostbyuseremail/:currentEmail', async(req, res) =>{
+  try{
+    const postList = await postData.getPostsByUserEmail(req.params.currentEmail);
+    
+    res.json(postList);
+  }catch(e){
+    res.status(500).json({error: e});
+  }
+});
+
+// make a new posts by email of user,
+// "useremail": currentEmail.value,
+// "tag": tag.value,
+// "title": title.value,
+// "discription": discription.value,
+// "price": price.value
+router.post('/makenewpostbyemail', async (req, res) =>{
   const blogPostData = req.body;
   if (!blogPostData.title) {
     res.status(400).json({ error: 'You must provide blog post title' });
     return;
   }
-  if (!blogPostData.body) {
-    res.status(400).json({ error: 'You must provide blog post body' });
+  if (!blogPostData.tag) {
+    res.status(400).json({ error: 'You must provide blog post tag' });
     return;
   }
-  if (!blogPostData.posterId) {
-    res.status(400).json({ error: 'You must provide poster ID' });
+  if (!blogPostData.useremail) {
+    res.status(400).json({ error: 'You must provide poster userId' });
+    return;
+  }
+  if (!blogPostData.discription) {
+    res.status(400).json({ error: 'You must provide poster discription' });
+    return;
+  }
+  if (!blogPostData.price) {
+    res.status(400).json({ error: 'You must provide poster price' });
+    return;
+  }
+  // if (!blogPostData.img) {
+  //   res.status(400).json({ error: 'You must provide poster img' });
+  //   return;
+  // }
+  try {
+    const { useremail, tag, title, discription, price } = blogPostData;
+    const newPost = await postData.addPostByUserEmail(useremail, tag, title, discription, price);
+    res.status(200).json(newPost);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+// make a new posts by id,  (done)
+router.post('/', async (req, res) => {
+  const blogPostData = req.body;
+  if (!blogPostData.title) {
+    res.status(400).json({ error: 'You must provide blog post title' });
+    return;
+  }
+  if (!blogPostData.tag) {
+    res.status(400).json({ error: 'You must provide blog post tag' });
+    return;
+  }
+  if (!blogPostData.userId) {
+    res.status(400).json({ error: 'You must provide poster userId' });
+    return;
+  }
+  if (!blogPostData.discription) {
+    res.status(400).json({ error: 'You must provide poster discription' });
+    return;
+  }
+  if (!blogPostData.img) {
+    res.status(400).json({ error: 'You must provide poster img' });
+    return;
+  }
+  if (!blogPostData.price) {
+    res.status(400).json({ error: 'You must provide poster price' });
     return;
   }
   try {
-    const { title, body, tags, posterId } = blogPostData;
-    const newPost = await postData.addPost(title, body, tags, posterId);
+    const { userId, tag, title, discription, img, price } = blogPostData;
+    const newPost = await postData.addPost(userId, tag, title, discription, img, price);
     res.json(newPost);
   } catch (e) {
     res.status(500).json({ error: e });
   }
 });
+
+
 
 router.put('/:id', async (req, res) => {
   const updatedData = req.body;
@@ -107,6 +188,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+//(done)
 router.delete('/:id', async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ error: 'You must Supply and ID to delete' });

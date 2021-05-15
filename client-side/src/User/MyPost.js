@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeStyles } from '@material-ui/core';
 import axios from 'axios';
 import noImage from '../img/download.jpeg';
+
 import '../App.css';
 
 const useStyles = makeStyles({ //TODO: should be modified
@@ -34,69 +35,37 @@ const useStyles = makeStyles({ //TODO: should be modified
     }
 });
 
-const Home = () => {
+const MyPost = (props) => {
 
-    const regex = /(<([^>]+)>)/gi;
+    const currentEmail = props.match.params.currentEmail;
+    
     const classes = useStyles();
     const [loading, setLoading] = useState(true);
     const [postData, setPostData] = useState([]);
-    const [typedData, setTypedData] = useState([]);
-    const [type, setType] = useState('all');
+
     let card = null;
-    let error = null;
+
 
     //get data from database
     useEffect(() => {
-        console.log('homepage useEffect fired');
+        console.log('myPost useEffect fired');
         async function fetchData() {
             try {
-                const { data } = await axios.get('http://localhost:3008/posts',
+                let url = `http://localhost:3008/posts/getpostbyuseremail/${currentEmail}`;
+                const { data } = await axios.get(url,
                     { headers: { Accept: 'application/json' } });
+                console.log(data);
                 setPostData(data);
+                console.log(postData);
                 setLoading(false);
-            } catch (e) {
-                console.log(e);
+            } catch (error) {
+                console.log(error);
             }
         }
         fetchData();
     }, []
     );
 
-    useEffect(() => {
-        console.log('homepage type useEffect fired');
-        async function fetchData() {
-            try {
-                const { data } = await axios.get('http://localhost:3008/posts/type/' + type,
-                    { headers: { Accept: 'application/json' } });
-                setTypedData(data);
-                setLoading(false);
-            } catch (e) {
-                console.log(e);
-            }
-        }
-        fetchData();
-    }, [type]
-    );
-
-    const handleChange = (e) => {
-        setType(e.target.value);
-    }
-
-    const typeSelector = (
-        <div>
-            <form>
-                <label>Choose trade type：</label>
-                <select className='selectpicker' onChange={handleChange}>
-                    <option value="all">all</option>
-                    <option value="furniture">furniture</option>
-                    <option value="digital product">digital product</option>
-                    <option value="currency exchange">currency exchange</option>
-                    <option value="bicycle">bicycle</option>
-                    <option value="test">test for none</option>
-                </select>
-            </form>
-        </div>
-    );
 
     const bulidCard = (post) => {
         return (
@@ -133,27 +102,11 @@ const Home = () => {
         );
     };
 
-    if (type != 'all') {
-        if (typedData.length > 0) {
-            card =
-                typedData &&
-                typedData.map((post) => {
-                    return bulidCard(post);
-                })
-        } else { //there is nothing of this type
-            error = (
-                <div>
-                    <h2 className='error'>There is nothing of this type, please try another type</h2>
-                </div>
-            )
-        }
-    } else {
-        card =
-            postData &&
-            postData.map((post) => {
-                return bulidCard(post);
-            })
-    }
+    card =
+        postData &&
+        postData.map((post) => {
+            return bulidCard(post);
+        })
 
     if (loading) {
         return (
@@ -164,9 +117,7 @@ const Home = () => {
     } else {
         return (
             <div>
-                {typeSelector}
                 <br />
-                {error}
                 <Grid container className={classes.grid} spacing={5}>
                     {card}
                 </Grid>
@@ -175,4 +126,4 @@ const Home = () => {
     }
 };
 
-export default Home;
+export default MyPost;
