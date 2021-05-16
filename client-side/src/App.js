@@ -2,6 +2,7 @@ import Login from './User/Login';
 import Register from './User/Register';
 import Home from './Components/Home';
 import Profile from './User/Profile';
+import PostDetail from './User/PostDetail';
 import MakeNewPost from './User/MakeNewPost';
 import MyPost from './User/MyPost';
 
@@ -77,6 +78,7 @@ function App() {
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/makenewpost/:currentEmail" component={MakeNewPost} />
           <Route exact path="/mypost/:currentEmail" component={MyPost} />
+          <Route exact path="/post/:id" component={PostDetail} />
         </div>
       </div>
     </Router>

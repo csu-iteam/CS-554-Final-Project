@@ -111,6 +111,8 @@ class MakeNewPost extends Component {
                     <label htmlFor="example4">price:</label>
                     <input type="number" className="form-control" id="price" defaultValue={price} name="price" onChange={this.handleChange} /><div id="priceError" className="error" hidden></div>
                 </div>
+                <br />
+                <br />
                 {/* <p>todo  img</p> */}
                 <div className="center">
                     <label for="post-img" class="postInput">
