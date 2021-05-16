@@ -1,19 +1,26 @@
 .App {
 	text-align: center;
 }
+
 .center {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
 	width: 30%;
 }
+
 .App-logo {
 	height: 80px;
+}
+
+.website-title {
+	color: #CCFF99;
 }
 
 input {
 	border: 1px solid #178577;
 }
+
 .show-body {
 	display: block;
 	margin-left: auto;
@@ -24,7 +31,6 @@ input {
 .App-header {
 	background-color: #336699;
 	padding: 20px;
-	color: #CCFF99;
 }
 
 .App-title {
@@ -36,10 +42,12 @@ input {
 cite {
 	font-weight: bold;
 }
+
 table {
 	align-content: center;
 	margin: auto;
 }
+
 td {
 	padding: 10px;
 }
@@ -47,17 +55,19 @@ td {
 .App-intro {
 	font-size: large;
 }
+
 .cap-first-letter:first-letter {
 	text-transform: capitalize;
 }
-.col-sm-6,
-col-md-4 {
+
+.col-sm-6, col-md-4 {
 	border: 1px;
 }
 
 .hometext {
 	max-width: 60%;
 }
+
 .showlink {
 	padding: 0.4rem 0.8rem;
 	background-color: white;
@@ -112,8 +122,7 @@ ul {
 	}
 }
 
-dt,
-dl {
+dt, dl {
 	padding: 0px;
 	margin-top: 0px;
 	margin-bottom: 0px;
