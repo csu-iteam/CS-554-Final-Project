@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeStyles } from '@material-ui/core';
 import axios from 'axios';
-import noImage from '../img/download.jpeg';
+import noImage from '../img/no_image.jpg';
 import '../App.css';
 
 const useStyles = makeStyles({ //TODO: should be modified
@@ -66,7 +66,7 @@ const Home = () => {
         console.log('homepage type useEffect fired');
         async function fetchData() {
             try {
-                const { data } = await axios.get('http://localhost:3008/posts/type/' + type,
+                const { data } = await axios.get('http://localhost:3008/posts/tag/' + type,
                     { headers: { Accept: 'application/json' } });
                 setTypedData(data);
                 setLoading(false);
@@ -143,7 +143,7 @@ const Home = () => {
         } else { //there is nothing of this type
             error = (
                 <div>
-                    <h2 className='error'>There is nothing of this type, please try another type</h2>
+                    <h2 className='nothing-in-this-type'>There is nothing of this type, please try another type</h2>
                 </div>
             )
         }
