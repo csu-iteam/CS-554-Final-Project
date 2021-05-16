@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto-js');
+const saltRounds = 10;
 const userData = data.users;
 
 router.get('/:id', async (req, res) => {
@@ -45,11 +48,18 @@ router.post('/register', async (req, res) => {
     return;
   }
 
+  const emailExist = await userData.judgeEmail(userInfo.email);
+  if (emailExist) {
+    res.status(406).json({ error: 'The email address input has been registered.' });
+    return;
+  }
+
+  const bcrypt_password = await bcrypt.hash(userInfo.password, saltRounds);
   try {
     const newUser = await userData.addUser(
       userInfo.username,
       userInfo.email,
-      userInfo.password
+      bcrypt_password
     );
     res.json(newUser);
   } catch (e) {
@@ -76,9 +86,15 @@ router.post('/login', async (req, res) => {
     return;
   }
 
+  let compareToMerlin = false;
   try {
-    let user = await userData.getUserByEmailAndPassword(userInfo.email, userInfo.password);
-    res.json(user);
+    const emailExist = await userData.judgeEmail(userInfo.email);
+    if (emailExist) {
+      let user = await userData.getUserByEmail(userInfo.email);
+      compareToMerlin = await bcrypt.compare(userInfo.password, user.password);
+      if(compareToMerlin) res.json(user);
+      else res.status(404).json({ error: 'Password is not correct' });
+    }
   } catch (e) {
     res.status(404).json({ error: 'User not found' });
   }

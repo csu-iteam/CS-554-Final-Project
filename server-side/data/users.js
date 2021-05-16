@@ -49,6 +49,16 @@ async getUserByEmail(useremail){
   return user;
 },
 
+// done
+async judgeEmail(useremail){
+  const userCollection = await users();
+  const user = await userCollection.findOne({ email: useremail });
+  if (user === null) {
+    return false;
+  }
+  return true;
+},
+
   // get user by ID  (done) 
 async getUserById(id) {
   if (typeof id != "string") {

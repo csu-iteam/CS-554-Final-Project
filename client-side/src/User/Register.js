@@ -44,7 +44,10 @@ class Register extends Component {
         if (!password.value) {
             passwordError.hidden = false;
             passwordError.innerHTML = 'Please enter valid password.';
-        } else {
+        } else if(password.value.length < 8){
+            passwordError.hidden = false;
+            passwordError.innerHTML = 'The length of password should be at least 8.';
+        }else{
             passwordError.hidden = true;
         }
 
@@ -71,7 +74,10 @@ class Register extends Component {
                     window.location.href = "/login";
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                alert("The email address input has been registered.");
+                window.location.href = "/register";
+            })
         }
     }
 
