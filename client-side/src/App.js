@@ -5,6 +5,7 @@ import Profile from './User/Profile';
 import MakeNewPost from './User/MakeNewPost';
 import MyPost from './User/MyPost';
 import ChatApp from './Chat/ChatApp';
+import Post from './Components/Post';
 
 import './App.css';
 import { useState, useEffect } from 'react';
@@ -80,6 +81,7 @@ function App() {
           <Route exact path="/makenewpost/:currentEmail" component={MakeNewPost} />
           <Route exact path="/mypost/:currentEmail" component={MyPost} />
           <Route exact path="/chat" component={ChatApp} />
+          <Route exact path="/post/:id" component={Post} />
         </div>
       </div>
     </Router>
