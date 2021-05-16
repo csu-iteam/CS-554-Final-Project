@@ -59,7 +59,10 @@ class Login extends Component {
                     let inFifteenMinutes = new Date(new Date().getTime() + 3 * 60 * 60 * 1000);
                     cookie.save('cookie_email', email.value, { expires: inFifteenMinutes });
                     cookie.save('cookie_password', password.value, { expires: inFifteenMinutes });
-                    cookie.save('current_email', email.value);
+                    cookie.save('current_username', response.data.username);
+                    cookie.save('current_email', response.data.email);
+                    cookie.save('current_password', response.data.password);
+                    cookie.save('current_id', response.data._id);
                     
                     window.location.href = "/";
                 }

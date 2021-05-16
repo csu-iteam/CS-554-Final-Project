@@ -6,9 +6,11 @@ const crypto = require('crypto-js');
 const saltRounds = 10;
 const userData = data.users;
 
-router.get('/:id', async (req, res) => {
+router.get('/user', async (req, res) => {
+  const email = req.body;
+  console.log(req.body);
   try {
-    let user = await userData.getUserById(req.params.id);
+    let user = await userData.getUserByEmail(email);
     res.json(user);
   } catch (e) {
     res.status(404).json({ error: 'User not found' });
@@ -100,30 +102,25 @@ router.post('/login', async (req, res) => {
   }
 });
 
+//done
 router.put('/:id', async (req, res) => {
   let userInfo = req.body;
 
   if (!userInfo) {
-    res.status(400).json({ error: 'You must provide data to update a user' });
+    res.status(400).json({ error: 'You must provide data to update a account' });
     return;
   }
 
-  if (!userInfo.firstName) {
-    res.status(400).json({ error: 'You must provide a first name' });
+  if (!userInfo.email) {
+    res.status(400).json({ error: 'You must provide the email address' });
     return;
   }
 
-  if (!userInfo.lastName) {
-    res.status(400).json({ error: 'You must provide a last name' });
+  if (!userInfo.password) {
+    res.status(400).json({ error: 'You must provide the password' });
     return;
   }
 
-  try {
-    await userData.getUserById(req.params.id);
-  } catch (e) {
-    res.status(404).json({ error: 'User not found' });
-    return;
-  }
   try {
     const updatedUser = await userData.updateUser(req.params.id, userInfo);
     res.json(updatedUser);

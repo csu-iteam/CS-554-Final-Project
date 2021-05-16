@@ -81,12 +81,15 @@ async getUserById(id) {
     }
     return true;
   },
+
+  //done
   async updateUser(id, updatedUser) {
     const user = await this.getUserById(id);
 
     let userUpdateInfo = {
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName
+      username: updatedUser.username,
+      email: updatedUser.email,
+      password: updatedUser.password
     };
 
     const userCollection = await users();
