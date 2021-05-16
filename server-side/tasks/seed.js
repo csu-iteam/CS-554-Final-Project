@@ -3,21 +3,25 @@ const data = require('../data/');
 const users = data.users;
 const posts = data.posts;
 
-// const post = {  //demo of post, do not de-comment this
-//   _id: '133e3c23-e74a-42c7-93d1-6bb57793a8db',
-//   userWhoPost: {
-//     id: '133e3c23-e74a-42c7-93d1-6bb57793a8daw',
-//     name: 'Patrick Hill',
-//     email: 'ph@stevens.com'
-//   },
-//   title: 'queen size bed',
-//   tag: ['furniture'],
-//   description: 'Selling a queen size bed which is 80% new, pick up at Hoboken *******',
-//   img: [''],
-//   price: '100$',
-//   time: '2021-05-15 3:6:31',
-//   bought: true
-// }
+/** demo of post, do not de-comment this 
+
+const post = {  
+  _id: '133e3c23-e74a-42c7-93d1-6bb57793a8db',
+  userWhoPost: {
+    id: '133e3c23-e74a-42c7-93d1-6bb57793a8daw',
+    name: 'Patrick Hill',
+    email: 'ph@stevens.com'
+  },
+  title: 'queen size bed',
+  tag: ['furniture'],
+  description: 'Selling a queen size bed which is 80% new, pick up at Hoboken *******',
+  img: [''],
+  price: '100$',
+  time: '2021-05-15 3:6:31',
+  bought: true
+}
+
+*/
 
 async function main() {
   const db = await dbConnection();
@@ -29,32 +33,38 @@ async function main() {
   // let post1_1 = await posts.addPost(user1._id.toString(),'111','111','111',[],100);
 
   // let post1 =  await posts.addPost(`133e3c23-e74a-42c7-93d1-6bb57793a8db`, 'computer', "jingwei computer", "discription", [], 1000)
-  const jingwei = await users.addUser('Jingwei', 'Li');
-  const id = jingwei._id;
+  const jingwei = await users.addUser('Jingwei', 'jw@stevens.edu', 'ASecretPassword');
+  const jwId = jingwei._id;
   await posts.addPost(
+    jwId,
+    ['currency exchange'],
     'Need US dollar',
     'I need to exchange RMB for USD(I need USD), payment method: Alipay and Zelle!',
+    ['no img'],
     'The current exchange rate for 1000USD',
-    ['currency exchange'],
-    id);
+  );
 
   await posts.addPost(
+    jwId,
+    ['furniture'],
     'Selling a queen size bed',
     'Selling a queen size bed which is 80% new, pick up at Hoboken *******',
-    '$100',
-    ['furniture'],
-    id
+    ['no img'],
+    '$100'
   );
 
   await posts.addPost(
+    jwId,
+    ['bicycle'],
     'Selling a branded bicycle!',
     'This a 90% new road bike which I bought 6 months ago with $800, I just rode it for less than 100 miles and never fell',
-    '$580',
-    ['bicycle'],
-    id
+    ['no img'],
+    '$580'
   );
 
   await posts.addPost(
+    jwId,
+    ['digital product'],
     'A high profile desktop PC!',
     `CPU: Intel i10 10900K
      GPU: Nvidia RTX 3090
@@ -62,18 +72,18 @@ async function main() {
      MotherBoard: ROG MAXIMUS XII EXTREME (Z490)
      Contact me if you want more details!
      `,
-    '$4800(not decided yet)',
-    ['digital product'],
-    id
+    ['no img'],
+    '$4800(not decided yet)'
   );
 
   await posts.addPost(
+    jwId,
+    ['digital product', 'furniture'],
     'Test double type',
     `test
      `,
-    'test',
-    ['digital product', 'furniture'],
-    id
+    ['no img'],
+    'test'
   );
 
 

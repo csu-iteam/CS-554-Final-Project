@@ -33,7 +33,7 @@ let exportedMethods = {
 
     const newInsertInformation = await userCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
-    return;
+    return await this.getUserById(newInsertInformation.insertedId);
   },
 
     //(done)
