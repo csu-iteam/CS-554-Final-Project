@@ -56,7 +56,7 @@ class Login extends Component {
                 if(response.status === 200){
                     alert('Login successful.');
                     //Set cookie
-                    let inFifteenMinutes = new Date(new Date().getTime() + 20 * 1000);
+                    let inFifteenMinutes = new Date(new Date().getTime() + 3 * 60 * 60 * 1000);
                     cookie.save('cookie_email', email.value, { expires: inFifteenMinutes });
                     cookie.save('cookie_password', password.value, { expires: inFifteenMinutes });
                     cookie.save('current_email', email.value);

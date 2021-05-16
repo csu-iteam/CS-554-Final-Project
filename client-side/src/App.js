@@ -5,6 +5,7 @@ import Profile from './User/Profile';
 import PostDetail from './User/PostDetail';
 import MakeNewPost from './User/MakeNewPost';
 import MyPost from './User/MyPost';
+import ChatApp from './Chat/ChatApp';
 
 import './App.css';
 import { useState, useEffect } from 'react';
@@ -59,7 +60,8 @@ function App() {
           </Link> <Link className="showlink" to="/profile"> Profile </Link>
           <Link className="showlink" to={`/makenewpost/${currentEmail}`}> New Post </Link>
           {/* <Link className="showlink" to="/makenewpost"> New Post </Link> */}
-          <Link className="showlink" to={`/mypost/${currentEmail}`}> My Posts </Link></div>
+          <Link className="showlink" to={`/mypost/${currentEmail}`}> My Posts </Link>
+          <Link className="showlink" to="/chat">Chat</Link></div>
           : <div style={{float:'right'}}><Link className="showlink" to="/login" onClick={() => {
             console.log('log in');
           }}>
@@ -79,6 +81,7 @@ function App() {
           <Route exact path="/makenewpost/:currentEmail" component={MakeNewPost} />
           <Route exact path="/mypost/:currentEmail" component={MyPost} />
           <Route exact path="/post/:id" component={PostDetail} />
+          <Route exact path="/chat" component={ChatApp} />
         </div>
       </div>
     </Router>

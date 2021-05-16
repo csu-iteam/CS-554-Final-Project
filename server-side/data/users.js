@@ -33,7 +33,7 @@ let exportedMethods = {
 
     const newInsertInformation = await userCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
-    return;
+    return await this.getUserById(newInsertInformation.insertedId);
   },
 
     //(done)
@@ -47,6 +47,16 @@ async getUserByEmail(useremail){
     throw "The user is not exist.";
   }
   return user;
+},
+
+// done
+async judgeEmail(useremail){
+  const userCollection = await users();
+  const user = await userCollection.findOne({ email: useremail });
+  if (user === null) {
+    return false;
+  }
+  return true;
 },
 
   // get user by ID  (done) 
