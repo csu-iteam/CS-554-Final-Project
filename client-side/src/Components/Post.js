@@ -8,11 +8,11 @@ import {
     CardMedia,
     Typography,
     CardHeader,
-    Button
+    Button,
+    Chip
 } from '@material-ui/core';
 import '../App.css';
 import axios from 'axios';
-import { load } from 'react-cookies';
 
 
 const useStyles = makeStyles({
@@ -42,7 +42,14 @@ const useStyles = makeStyles({
         fontWeight: 'bold',
         fontSize: 12
     },
-    lix:{
+    lix: {
+        color: '#000'
+    },
+    secondary_container: {
+        textAlign: 'justify'
+    },
+    secondary_title: {
+        fontWeight: 'bold',
         color: '#000'
     }
 });
@@ -65,7 +72,7 @@ const Post = (props) => {
                     setBadRequest(true);
                     setLoading(false);
                 } else {
-                    let {data} = await axios.get(`http://localhost:3008/posts/${id}`);
+                    let { data } = await axios.get(`http://localhost:3008/posts/${id}`);
                     setPostData(data);
                     setLoading(false);
                 }
@@ -79,13 +86,23 @@ const Post = (props) => {
         fetchData();
     }, [props.match.params.id]);
 
-    if(loading){
-        return(
+    function generateTag(tag) {
+        return (
+            <Chip label={tag} color='primary' />
+        );
+    }
+
+    let tags = postData && postData.tag.map((tag) => {
+        return generateTag(tag);
+    });
+
+    if (loading) {
+        return (
             <div>
                 <h2>Loading...</h2>
             </div>
         );
-    }else if (badRequest) {
+    } else if (badRequest) {
         return (
             <div>
                 <h2>400: input ID is illegal</h2>
@@ -97,31 +114,38 @@ const Post = (props) => {
                 <h2>404: character not found</h2>
             </div>
         );
-    }else{
-        return(
+    } else {
+        return (
             <Card className={classes.card} variant="outlined">
-            <CardHeader className={classes.titleHead} title={postData.title} />
-            <CardMedia className={classes.media} component="img"
-                image={
-                    postData.thumbnail && postData.thumbnail.path && postData.thumbnail.extension ? `${postData.thumbnail.path}/portrait_xlarge.${postData.thumbnail.extension}` : noImage
-                }
-                title="Item image" />
-            <CardContent>
-                <Typography>
-                    Price:{postData.price}{postData.tag}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="div">
-                    {postData.discription}
-                </Typography>
-                <Typography>
-                    Seller:{postData.userWhoPost.name}
-                    <Button>Contact with him/her</Button>
-                </Typography>
-                <Typography>
-                    Email:{postData.userWhoPost.email}
-                </Typography>
-            </CardContent>
-        </Card>
+                <CardHeader className={classes.titleHead} title={postData.title} />
+                <CardMedia className={classes.media} component="img"
+                    image={
+                        postData.thumbnail && postData.thumbnail.path && postData.thumbnail.extension ? `${postData.thumbnail.path}/portrait_xlarge.${postData.thumbnail.extension}` : noImage
+                    }
+                    title="Item image" />
+                <CardContent>
+                    <Typography className={classes.secondary_container}>
+                        {tags}
+                    </Typography>
+                    <Typography className={classes.secondary_container}>
+                        <label className={classes.secondary_title}>Price:</label>{postData.price}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="div" className={classes.secondary_container}>
+                        <label className={classes.secondary_title}>Description:</label>
+                        {postData.discription}
+                    </Typography>
+                    <Typography className={classes.secondary_container}>
+                        <label className={classes.secondary_title}>
+                            Seller:
+                        </label>
+                        {postData.userWhoPost.name}
+                    </Typography>
+                    <Typography className={classes.secondary_container}>
+                        <label className={classes.secondary_title}>Email:</label>{postData.userWhoPost.email}
+                    </Typography>
+                    <Button variant="contained" color='primary'>Contact with him/her</Button>
+                </CardContent>
+            </Card>
         );
     }
 
