@@ -131,8 +131,7 @@ const exportedMethods = {
       time: timenow,
       bought: false,
       //////follower buyer list 
-      followers: [],
-      sold: false
+      followers: []
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const postData = data.posts;
-const imageData=data.images;
+const imageData = data.images;
 
 //Show the single post with id   (done)
 router.get('/:id', async (req, res) => {
@@ -31,24 +31,24 @@ router.get('/', async (req, res) => {
 });
 
 //show all of the posts by username (done)
-router.get('/getpostbyuser/:username', async(req, res) =>{
-  try{
+router.get('/getpostbyuser/:username', async (req, res) => {
+  try {
     const postList = await postData.getPostsByUser(req.params.username);
-    
+
     res.json(postList);
-  }catch(e){
-    res.status(500).json({error: e});
+  } catch (e) {
+    res.status(500).json({ error: e });
   }
 });
 
 //  get post by email  (done)
-router.get('/getpostbyuseremail/:currentEmail', async(req, res) =>{
-  try{
+router.get('/getpostbyuseremail/:currentEmail', async (req, res) => {
+  try {
     const postList = await postData.getPostsByUserEmail(req.params.currentEmail);
-    
+
     res.json(postList);
-  }catch(e){
-    res.status(500).json({error: e});
+  } catch (e) {
+    res.status(500).json({ error: e });
   }
 });
 
@@ -58,7 +58,7 @@ router.get('/getpostbyuseremail/:currentEmail', async(req, res) =>{
 // "title": title.value,
 // "discription": discription.value,
 // "price": price.value
-router.post('/makenewpostbyemail', async (req, res) =>{
+router.post('/makenewpostbyemail', async (req, res) => {
   const blogPostData = req.body;
   if (!blogPostData.title) {
     res.status(400).json({ error: 'You must provide blog post title' });
@@ -85,10 +85,10 @@ router.post('/makenewpostbyemail', async (req, res) =>{
     return;
   }
   try {
-    const { useremail, tag, title, discription, price,imgbase64head} = blogPostData;
-    const imageId=await imageData.insertImage(imgbase64head);
-    const imageArray=[imageId]
-    const newPost = await postData.addPostByUserEmail(useremail, tag, title, discription,imageArray, price);
+    const { useremail, tag, title, discription, price, imgbase64head } = blogPostData;
+    const imageId = await imageData.insertImage(imgbase64head);
+    const imageArray = [imageId]
+    const newPost = await postData.addPostByUserEmail(useremail, tag, title, discription, imageArray, price);
     res.status(200).json(newPost);
   } catch (e) {
     res.status(500).json({ error: e });
@@ -124,8 +124,8 @@ router.post('/', async (req, res) => {
   }
   try {
     const { userId, tag, title, discription, price, imgbase64head } = blogPostData;
-    const imageId=await imageData.insertImage(imgbase64head);
-    const imageArray=[imageId]
+    const imageId = await imageData.insertImage(imgbase64head);
+    const imageArray = [imageId]
     const newPost = await postData.addPost(userId, tag, title, discription, imageArray, price);
     res.json(newPost);
   } catch (e) {
@@ -213,4 +213,25 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+router.get('follow/:userId/:postId', async (req, res) => {
+  let userId = req.params.userId;
+  let postId = req.params.postId;
+  try {
+    await postData.follow(postId, userId);
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.get('unFollow/:userId/:postId', async (req, res) => {
+  let userId = req.params.userId;
+  let postId = req.params.postId;
+  try {
+    await postData.cancelFollow(postId, userId);
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
 module.exports = router;
