@@ -107,8 +107,7 @@ const Home = () => {
                             <CardMedia
                                 className={classes.media}
                                 component='img'
-                                //TODO: image={post.thumbnail ? `${post.thumbnail.path}/portrait_incredible.${post.thumbnail.extension}` : noImage} haven't create img upload
-                                image={noImage}
+                                image={post && post.imgbase64headArray ? `${post.imgbase64headArray[0].imgbase64head}` : noImage}
                                 title='post image'
                             />
 
@@ -133,7 +132,7 @@ const Home = () => {
         );
     };
 
-    if (type != 'all') {
+    if (type !== 'all') {
         if (typedData.length > 0) {
             card =
                 typedData &&
