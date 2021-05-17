@@ -2,9 +2,11 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const uuid = require('uuid/v4');
 const ObjectId = require('mongodb').ObjectID;
+const axios = require('axios');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto-js');
 const saltRounds = 10;
+const privateKey = "bb7a9a43-0fdf-45e0-808c-0a3904dba224";
 
 let exportedMethods = {
   async getAllUsers() {
@@ -34,9 +36,10 @@ let exportedMethods = {
       _id: uuid(),
       posts: posts
     };
-
     const newInsertInformation = await userCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
+    const newChatUserCreated = await this.addChatUser(newUser);
+    if (!newChatUserCreated?.id) throw 'Fail to create chat user';
     return await this.getUserById(newInsertInformation.insertedId);
   },
 
@@ -89,7 +92,7 @@ async getUserById(id) {
   //done
   async updateUser(id, updatedUser) {
     const user = await this.getUserById(id);
-
+    
     let userUpdateInfo = {
       username: updatedUser.username,
       email: updatedUser.email,
@@ -133,7 +136,51 @@ async getUserById(id) {
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount){
       throw 'Update failed';
     }
-  }
+  },
+
+  async addChatUser({username, email, password}) {
+    const data = {
+      "username": username,
+      "secret": password,
+      "email": email,
+    };
+    const config = {
+      method: 'post',
+      url: 'https://api.chatengine.io/users/',
+      headers: {
+        'PRIVATE-KEY': privateKey
+      },
+      data: data
+    };
+
+    try {
+      return await axios(config);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async patchChatUser({ username, email, password }) {
+    const data = {
+      "username": username,
+      "secret": password,
+      "email": email,
+    };
+    const config = {
+      method: 'post',
+      url: 'https://api.chatengine.io/users/',
+      headers: {
+        'PRIVATE-KEY': privateKey
+      },
+      data: data
+    };
+
+    try {
+      return await axios(config);
+    } catch (e) {
+      console.error(e);
+    }
+  },
 }
 
 module.exports = exportedMethods;
