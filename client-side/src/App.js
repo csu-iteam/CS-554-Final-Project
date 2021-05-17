@@ -53,7 +53,10 @@ function App() {
 
           {currentLogin === true ? <div style={{ float: 'right' }}>
             <Link className="showlink" to="/" onClick={() => {
+              cookie.remove('current_username');
               cookie.remove('current_email');
+              cookie.remove('current_password');
+              cookie.remove('current_id');
               SetCurrentLogin(false);
               console.log('log out');
             }}>
