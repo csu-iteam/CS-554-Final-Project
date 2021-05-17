@@ -165,7 +165,7 @@ const exportedMethods = {
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
       const newId = newInsertInformation.insertedId;
-
+      
       await users.addPostToUser(userId, newId);
       return await this.getPostById(newId);
     } catch (e) {
