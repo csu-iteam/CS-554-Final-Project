@@ -6,7 +6,48 @@ const uuid = require('uuid/v4');
 const exportedMethods = {
   async getAllPosts() {
     const postCollection = await posts();
-    return await postCollection.find({}).toArray();
+    const allPost = await postCollection.find({}).toArray();
+    if (!allPost) throw 'Posts not found';
+    ////convert img array to imgbase64head array
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+    /////
+    return allPost;
+  },
+
+  //(done)
+  async getPostsByTag(tag) {
+    if (!tag) throw 'No tag provided';
+    const postCollection = await posts();
+    const typedPost = await postCollection.find({ tag: tag }).toArray();
+    if (!typedPost) throw 'Posts not found';
+    ////convert img array to imgbase64head array
+    await Promise.all(typedPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+    /////
+    return typedPost;
+  },
+
+  //(done)
+  async getPostsByUser(username) {
+    if (!username) throw 'No username provided';
+    const postCollection = await posts();
+
+    return await postCollection.find({ "userWhoPost.name": username }).toArray();
   },
   async getPostsByType(type) {
     if (!type) throw 'No type provided';
