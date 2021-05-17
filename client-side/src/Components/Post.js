@@ -92,10 +92,10 @@ const Post = (props) => {
         );
     }
 
-    // let tags = postData && postData.tag.map((tag) => {
-    //     return generateTag(tag);
-    // });
-    let tags='';
+    let tags = postData && postData.tag.map((tag) => {
+        return generateTag(tag);
+    });
+    // let tags='';
 
     if (loading) {
         return (
