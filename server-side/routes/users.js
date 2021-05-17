@@ -95,6 +95,8 @@ router.post('/login', async (req, res) => {
       compareToMerlin = await bcrypt.compare(userInfo.password, user.password);
       if(compareToMerlin) res.json(user);
       else res.status(404).json({ error: 'Password is not correct' });
+    }else{
+      res.status(404).json({ error: 'User not found' });
     }
   } catch (e) {
     res.status(404).json({ error: 'User not found' });
