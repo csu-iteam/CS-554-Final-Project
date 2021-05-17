@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeStyles } from '@material-ui/core';
 import axios from 'axios';
-import PostDetail from './PostDetail';
 import noImage from '../img/no_image.jpg';
 
 

@@ -1,16 +1,34 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import '../App.css';
 
+import MultiSelect from "react-multi-select-component";
+
+const options = [
+    { label: "A", value: "A" },
+    { label: "B", value: "B" },
+    { label: "C", value: "C"},
+    { label: "D", value: "D" },
+    { label: "E", value: "E" },
+    { label: "F", value: "F" },
+    { label: "G", value: "G" },
+    { label: "H", value: "H" },
+    { label: "I", value: "I" },
+  ];
 
 class MakeNewPost extends Component {
 
+    
     state = {
-        tag: '',
+        tag: [],
         title: '',
         discription: '',
-        price: ''
+        price: '',
+        selected: []
     };
+
+    
+    
 
     handleSubmit = async e => {
         <script type="text/javascript"></script>
@@ -18,8 +36,8 @@ class MakeNewPost extends Component {
         let isNullFormate = "^[ ]+$";
         let isNullCheck = new RegExp(isNullFormate);
 
-        let tag = document.getElementById('tag');
-        let tagError = document.getElementById('tagError');
+        let selected = document.getElementById('selected');
+        let selectedError = document.getElementById('selectedError');
         let title = document.getElementById('title');
         let titleError = document.getElementById('titleError');
         let discription = document.getElementById('discription');
@@ -29,11 +47,11 @@ class MakeNewPost extends Component {
         let currentEmail = document.getElementById('currentEmail');
         e.preventDefault();
 
-        if (!tag.value || isNullCheck.test(tag.value)) {
-            tagError.hidden = false;
-            tagError.innerHTML = 'Please enter valid tag.';
+        if (!selected) {
+            selectedError.hidden = false;
+            selectedError.innerHTML = 'Please enter valid tag.';
         } else {
-            tagError.hidden = true;
+            selectedError.hidden = true;
         }
 
         if (!title.value || isNullCheck.test(title.value)) {
@@ -57,8 +75,8 @@ class MakeNewPost extends Component {
             priceError.hidden = true;
         }
 
-        if (tagError.hidden === true && titleError.hidden === true && discriptionError.hidden === true && priceError.hidden === true) {
-            let priceNum = Number(price.value);
+        if (selectedError.hidden === true && titleError.hidden === true && discriptionError.hidden === true && priceError.hidden === true) {
+         
 
             ////////////////////
             let base64head = '';
@@ -73,10 +91,10 @@ class MakeNewPost extends Component {
                     ////////////////
                     axios.post(`http://localhost:3008/posts/makenewpostbyemail`, {
                         "useremail": currentEmail.value,
-                        "tag": tag.value,
+                        "tag": selected.value,
                         "title": title.value,
                         "discription": discription.value,
-                        "price": priceNum,
+                        "price": price.value,
                         "imgbase64head": base64head
                     }).then(function (response) {
                         console.log("response: ", response);
@@ -96,20 +114,40 @@ class MakeNewPost extends Component {
         });
     };
 
+
     render() {
 
         //userId, tag, title, discription, img, price
         const currentEmail = this.props.match.params.currentEmail;
-        const { tag, title, discription, img, price } = this.state;
+        const { selected, title, discription, price } = this.state;
+
+          
         return (
             <form onSubmit={this.handleSubmit}>
+                
+                {/* <MutiTags id="tag" />
+                <MutiTags bgcolor={this.state.bgcolor} changeColor={(color)=>{this.bgChange(color)}} /> */}
+                <div  className="center" >
+                    <p>Select Tag:</p>
+                <MultiSelect
+                    options={options}
+                    value={selected}
+                    onChange={selected =>this.setState({selected})}
+                    labelledBy="Select"
+                    id="selected"
+                />
+                </div><div id="selectedError" className="error" hidden></div>
+              
+
+
+
                 <div hidden>
                     <input type="string" className="form-control" id="currentEmail" defaultValue={currentEmail} name="currentEmail" />{currentEmail}<div></div>
                 </div>
-                <div className="center">
+                {/* <div className="center">
                     <label htmlFor="example1">tag:</label>
                     <input type="string" className="form-control" id="tag" defaultValue={tag} name="tag" onChange={this.handleChange} /><div id="tagError" className="error" hidden></div>
-                </div>
+                </div> */}
                 <br />
                 <div className="center">
                     <label htmlFor="example2">title:</label>
@@ -123,14 +161,14 @@ class MakeNewPost extends Component {
                 <br />
                 <div className="center">
                     <label htmlFor="example4">price:</label>
-                    <input type="number" className="form-control" id="price" defaultValue={price} name="price" onChange={this.handleChange} /><div id="priceError" className="error" hidden></div>
+                    <input type="string" className="form-control" id="price" defaultValue={price} name="price" onChange={this.handleChange} /><div id="priceError" className="error" hidden></div>
                 </div>
                 <br />
                 <br />
                 {/* <p>todo  img</p> */}
                 <div className="center">
                     <label for="post-img" class="postInput">
-                        <button id="postImg">Upload IMG</button>
+                        <button  type="submit" id="postImg">Upload IMG</button>
                         <input type="file" id="file_input" multiple />
                     </label>
                 </div>

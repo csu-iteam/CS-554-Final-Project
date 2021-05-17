@@ -27,7 +27,7 @@ async function main() {
   const db = await dbConnection();
   await db.dropDatabase();
 
-  let user1 = await users.addUser('111', '11111@stevens.edu', '12345');
+  let user1 = await users.addUser('11111111', '11111@stevens.edu', '12345');
   let user2 = await users.addUser('222', '22222@stevens.edu', '12345');
   let user3 = await users.addUser('333', '33333@stevens.edu', '12345');
   // let post1_1 = await posts.addPost(user1._id.toString(),'111','111','111',[],100);
@@ -35,7 +35,7 @@ async function main() {
   // let post1 =  await posts.addPost(`133e3c23-e74a-42c7-93d1-6bb57793a8db`, 'computer', "jingwei computer", "discription", [], 1000)
   const jingwei = await users.addUser('Jingwei', 'jw@stevens.edu', 'ASecretPassword');
   const jwId = jingwei._id;
-  await posts.addPost(
+  let p = await posts.addPost(
     jwId,
     ['currency exchange'],
     'Need US dollar',
@@ -44,7 +44,9 @@ async function main() {
     'The current exchange rate for 1000USD',
   );
 
-  await posts.addPost(
+  console.log(p);
+
+  let p2 = await posts.addPost(
     jwId,
     ['furniture'],
     'Selling a queen size bed',
@@ -53,7 +55,7 @@ async function main() {
     '$100'
   );
 
-  await posts.addPost(
+  let p3 = await posts.addPost(
     jwId,
     ['bicycle'],
     'Selling a branded bicycle!',
@@ -62,7 +64,7 @@ async function main() {
     '$580'
   );
 
-  await posts.addPost(
+  let p4 = await posts.addPost(
     jwId,
     ['digital product'],
     'A high profile desktop PC!',
@@ -76,7 +78,7 @@ async function main() {
     '$4800(not decided yet)'
   );
 
-  await posts.addPost(
+  let p5 = await posts.addPost(
     jwId,
     ['digital product', 'furniture'],
     'Test double type',
