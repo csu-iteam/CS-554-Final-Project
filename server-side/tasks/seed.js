@@ -35,21 +35,25 @@ async function main() {
   // let post1 =  await posts.addPost(`133e3c23-e74a-42c7-93d1-6bb57793a8db`, 'computer', "jingwei computer", "discription", [], 1000)
   const jingwei = await users.addUser('Jingwei', 'jw@stevens.edu', 'ASecretPassword');
   const jwId = jingwei._id;
+
+  const imgId = await data.images.insertImage('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAaVBMVEUAAAAkiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8AAABV2AGBAAAAIXRSTlMAAA0ZC5G5Hv6pFqoVCh1K2WqNVfng+KZU5msMUvEmHE2Aq2qFAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAAAZAAAAGQAD5bF3QAAAAd0SU1FB+UFEQ0xHp6SNpkAAABXSURBVBjTnc85AoAgEAPAjeKFeCKIitf/P2knrKXpJqlC9AZAkoJZZHnBXVaSu1bglsDX+GN896YVzNT1wxib9GTsrILJ2XtZt2Dyu7XmiE6e3ukrCcUDk3EEYb9x3BYAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDUtMTFUMDQ6MTk6MzUrMDA6MDAtZWOCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTEyLTI5VDA1OjUwOjIwKzAwOjAwSwhlzAAAACB0RVh0c29mdHdhcmUAaHR0cHM6Ly9pbWFnZW1hZ2ljay5vcme8zx2dAAAAY3RFWHRzdmc6Y29tbWVudAAgR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICDOSJALAAAAGHRFWHRUaHVtYjo6RG9jdW1lbnQ6OlBhZ2VzADGn/7svAAAAGHRFWHRUaHVtYjo6SW1hZ2U6OkhlaWdodAA0MDh3geHpAAAAF3RFWHRUaHVtYjo6SW1hZ2U6OldpZHRoADQwOORwsbQAAAAZdEVYdFRodW1iOjpNaW1ldHlwZQBpbWFnZS9wbmc/slZOAAAAF3RFWHRUaHVtYjo6TVRpbWUAMTYwOTIyMTAyMCoVzTwAAAARdEVYdFRodW1iOjpTaXplADEzMzFClyzsNgAAAFp0RVh0VGh1bWI6OlVSSQBmaWxlOi8vL2RhdGEvd3d3cm9vdC93d3cuZWFzeWljb24ubmV0L2Nkbi1pbWcuZWFzeWljb24uY24vZmlsZXMvMTMwLzEzMDExMDAucG5n8Fo4aQAAAABJRU5ErkJggg==')
+
   await posts.addPost(
     jwId,
     ['currency exchange'],
     'Need US dollar',
     'I need to exchange RMB for USD(I need USD), payment method: Alipay and Zelle!',
-    ['no img'],
-    'The current exchange rate for 1000USD',
+    [imgId],
+    'The current exchange rate for 1000USD'
   );
+
 
   await posts.addPost(
     jwId,
     ['furniture'],
     'Selling a queen size bed',
     'Selling a queen size bed which is 80% new, pick up at Hoboken *******',
-    ['no img'],
+    [imgId],
     '$100'
   );
 
@@ -58,7 +62,7 @@ async function main() {
     ['bicycle'],
     'Selling a branded bicycle!',
     'This a 90% new road bike which I bought 6 months ago with $800, I just rode it for less than 100 miles and never fell',
-    ['no img'],
+    [imgId],
     '$580'
   );
 
@@ -72,7 +76,7 @@ async function main() {
      MotherBoard: ROG MAXIMUS XII EXTREME (Z490)
      Contact me if you want more details!
      `,
-    ['no img'],
+    [imgId],
     '$4800(not decided yet)'
   );
 
@@ -82,7 +86,7 @@ async function main() {
     'Test double type',
     `test
      `,
-    ['no img'],
+    [imgId],
     'test'
   );
 
