@@ -5,15 +5,17 @@ import '../App.css';
 import MultiSelect from "react-multi-select-component";
 
 const options = [
-    { label: "A", value: "A" },
-    { label: "B", value: "B" },
-    { label: "C", value: "C" },
-    { label: "D", value: "D" },
-    { label: "E", value: "E" },
-    { label: "F", value: "F" },
-    { label: "G", value: "G" },
-    { label: "H", value: "H" },
-    { label: "I", value: "I" },
+    { label: "Electronics", value: "Electronics" },
+    { label: "Computers", value: "Computers" },
+    { label: "Smart Home", value: "Smart Home" },
+    { label: "Home,Garden,Tools", value: "Home,Garden,Tools" },
+    { label: "Pet Supplies", value: "Pet Supplies" },
+    { label: "Beauty,Health", value: "Beauty,Health" },
+    { label: "Handmade", value: "Handmade" },
+    { label: "Books", value: "Books" },
+    { label: "Outdoors", value: "Outdoors" },
+    { label: "MoneyChange", value: "MoneyChange" },
+    { label: "Others", value: "Others" },
 ];
 
 class MakeNewPost extends Component {

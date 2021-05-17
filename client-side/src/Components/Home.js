@@ -88,11 +88,17 @@ const Home = () => {
                 <label>Choose trade type：</label>
                 <select className='selectpicker' onChange={handleChange}>
                     <option value="all">all</option>
-                    <option value="furniture">furniture</option>
-                    <option value="digital product">digital product</option>
-                    <option value="currency exchange">currency exchange</option>
-                    <option value="bicycle">bicycle</option>
-                    <option value="test">test for none</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Computers">Computers</option>
+                    <option value="Smart Home">Smart Home</option>
+                    <option value="Home,Garden,Tools">Home,Garden,Tools</option>
+                    <option value="Pet Supplies">Pet Supplies</option>
+                    <option value="Handmade">Handmade</option>
+                    <option value="Books">Books</option>
+                    <option value="Outdoors">Outdoors</option>
+                    <option value="MoneyChange">MoneyChange</option>
+                    <option value="Others">Others</option>
+                    
                 </select>
             </form>
         </div>

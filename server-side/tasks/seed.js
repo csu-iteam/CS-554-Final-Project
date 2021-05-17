@@ -42,7 +42,7 @@ async function main() {
   await posts.addPost(
 
     jwId,
-    ['currency exchange'],
+    ['MoneyChange'],
     'Need US dollar',
     'I need to exchange RMB for USD(I need USD), payment method: Alipay and Zelle!',
     [imgId],
@@ -51,7 +51,7 @@ async function main() {
 
   await posts.addPost(
     jwId,
-    ['furniture'],
+    ['Home,Garden,Tools','Smart Home'],
     'Selling a queen size bed',
     'Selling a queen size bed which is 80% new, pick up at Hoboken *******',
     [imgId],
@@ -60,7 +60,7 @@ async function main() {
 
   await posts.addPost(
     jwId,
-    ['bicycle'],
+    ['Outdoors','Others'],
     'Selling a branded bicycle!',
     'This a 90% new road bike which I bought 6 months ago with $800, I just rode it for less than 100 miles and never fell',
     [imgId],
@@ -69,7 +69,7 @@ async function main() {
 
   await posts.addPost(
     jwId,
-    ['digital product'],
+    ['Electronics','Computers'],
     'A high profile desktop PC!',
     `CPU: Intel i10 10900K
      GPU: Nvidia RTX 3090
@@ -83,12 +83,12 @@ async function main() {
 
   await posts.addPost(
     jwId,
-    ['digital product', 'furniture'],
-    'Test double type',
-    `test
+    ['Books'],
+    'CS554 book',
+    `this is a book which can make sure you get A 
      `,
     [imgId],
-    'test'
+    '$10000000000'
   );
 
   console.log('Done seeding database');
