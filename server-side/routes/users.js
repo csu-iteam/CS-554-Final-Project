@@ -56,12 +56,11 @@ router.post('/register', async (req, res) => {
     return;
   }
 
-  const bcrypt_password = await bcrypt.hash(userInfo.password, saltRounds);
   try {
     const newUser = await userData.addUser(
       userInfo.username,
       userInfo.email,
-      bcrypt_password
+      userInfo.password
     );
     res.json(newUser);
   } catch (e) {

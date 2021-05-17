@@ -2,6 +2,9 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const uuid = require('uuid/v4');
 const ObjectId = require('mongodb').ObjectID;
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto-js');
+const saltRounds = 10;
 
 let exportedMethods = {
   async getAllUsers() {
@@ -22,11 +25,12 @@ let exportedMethods = {
   //Done
   async addUser(username, email, password) {
     const userCollection = await users();
+    const bcrypt_password = await bcrypt.hash(password, saltRounds);
     posts = [];
     let newUser = {
       username: username,
       email: email,
-      password: password,
+      password: bcrypt_password,
       _id: uuid(),
       posts: posts
     };
