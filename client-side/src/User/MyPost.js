@@ -74,11 +74,10 @@ const MyPost = (props) => {
                 <Card className={classes.card} variant='outlined'>
                     <CardActionArea>
                         <Link to={`/post/${post._id}`}>
-                            <CardMedia
+                        <CardMedia
                                 className={classes.media}
                                 component='img'
-                                //TODO: image={post.thumbnail ? `${post.thumbnail.path}/portrait_incredible.${post.thumbnail.extension}` : noImage} haven't create img upload
-                                image={noImage}
+                                image={post && post.imgbase64headArray ? `${post.imgbase64headArray[0].imgbase64head}` : noImage}
                                 title='post image'
                             />
 
@@ -95,7 +94,6 @@ const MyPost = (props) => {
                                 <Typography variant='body3' color='textSecondary' component='p'>
                                     Release Time: {post.time}
                                 </Typography>
-                                
                             </CardContent>
                         </Link>
                     </CardActionArea>

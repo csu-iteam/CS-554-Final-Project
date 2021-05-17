@@ -32,12 +32,14 @@ function getNowFormatDate() {
 
 
 const exportedMethods = {
+
+
   //(done)
-  async getAllPosts() {
+  async getPostsByTag(tag) {
+    if (!tag) throw 'No tag provided';
     const postCollection = await posts();
-    const allPost = await postCollection.find({}).toArray();
+    const allPost = await postCollection.find({ tag: tag }).toArray();
     if (!allPost) throw 'Posts not found';
-    ////convert img array to imgbase64head array
     await Promise.all(allPost.map(async (post) => {
       const imgArray = post.img;
       const imgbase64headArray = [];
@@ -47,15 +49,9 @@ const exportedMethods = {
       }
       post.imgbase64headArray = imgbase64headArray;
     }))
-    /////
-    return allPost;
-  },
 
-  //(done)
-  async getPostsByTag(tag) {
-    if (!tag) throw 'No tag provided';
-    const postCollection = await posts();
-    return await postCollection.find({ tag: tag }).toArray();
+    return allPost;
+
   },
 
   //(done)
@@ -66,12 +62,45 @@ const exportedMethods = {
     return await postCollection.find({ "userWhoPost.name": username }).toArray();
   },
 
+
   //(done)
   async getPostsByUserEmail(currentEmail) {
     if (!currentEmail) throw 'no user email provide';
     const postCollection = await posts();
-    return await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
+    const allPost = await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+
+    return allPost;
   },
+
+
+    //(done)
+    async getAllPosts() {
+      const postCollection = await posts();
+      const allPost = await postCollection.find({}).toArray();
+      if (!allPost) throw 'Posts not found';
+      ////convert img array to imgbase64head array
+      await Promise.all(allPost.map(async (post) => {
+        const imgArray = post.img;
+        const imgbase64headArray = [];
+        for (i = 0; i < imgArray.length; i++) {
+          let imgbase64head = await images.getImageById(imgArray[i]);
+          imgbase64headArray.push(imgbase64head);
+        }
+        post.imgbase64headArray = imgbase64headArray;
+      }))
+      /////
+      return allPost;
+    },
 
   //(done)
   async getPostById(id) {
