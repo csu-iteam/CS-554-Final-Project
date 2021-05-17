@@ -42,9 +42,12 @@ function App() {
           <h1 className='website-title'>
             Secondary Market
         </h1>
-          <Link className="showlink" id="home-btn" to="/">
-            Home
+          <div className="home-btn">
+            <Link className="showlink" to="/">
+              Home
           </Link>
+          </div>
+
           {/* TODO: when user logged in, display profile button and log out button. 
           Otherwise, display log in button without profile button */}
           {/* <Link className="showlink" to="/profile">
@@ -58,7 +61,8 @@ function App() {
               console.log('log out');
             }}>
               Log out
-          </Link> <Link className="showlink" to="/profile"> Profile </Link>
+            </Link>
+            <Link className="showlink" to="/profile"> Profile </Link>
             <Link className="showlink" to={`/makenewpost/${currentEmail}`}> New Post </Link>
             {/* <Link className="showlink" to="/makenewpost"> New Post </Link> */}
             <Link className="showlink" to={`/mypost/${currentEmail}`}> My Posts </Link>

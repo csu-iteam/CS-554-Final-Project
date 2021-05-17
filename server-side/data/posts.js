@@ -1,7 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const posts = mongoCollections.posts;
 const users = require('./users');
-const images=require('./image');
+const images = require('./image');
 const uuid = require('uuid/v4');
 
 var { ObjectId } = require('mongodb');
@@ -35,7 +35,20 @@ const exportedMethods = {
   //(done)
   async getAllPosts() {
     const postCollection = await posts();
-    return await postCollection.find({}).toArray();
+    const allPost = await postCollection.find({}).toArray();
+    if (!allPost) throw 'Posts not found';
+    ////convert img array to imgbase64head array
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+    /////
+    return allPost;
   },
 
   //(done)
@@ -67,19 +80,19 @@ const exportedMethods = {
     const post = await postCollection.findOne({ _id: ObjectId(id) });
     if (!post) throw 'Post not found';
     //////convert img array to imgbase64head array
-    const imgArray=post.img;
-    const imgbase64headArray=[];
-    for (i=0;i<imgArray.length;i++){
-      let imgbase64head=await images.getImageById(imgArray[i]);
+    const imgArray = post.img;
+    const imgbase64headArray = [];
+    for (i = 0; i < imgArray.length; i++) {
+      let imgbase64head = await images.getImageById(imgArray[i]);
       imgbase64headArray.push(imgbase64head);
     }
-    post.imgbase64headArray=imgbase64headArray;
+    post.imgbase64headArray = imgbase64headArray;
     /////
     return post;
   },
 
   //add post by user eamil  (done)   img todo
-  async addPostByUserEmail(useremail, tag, title, discription,imageArray, price) {
+  async addPostByUserEmail(useremail, tag, title, discription, imageArray, price) {
     if (!useremail) {
       throw 'Add post failed, need provide user ID';
     }
@@ -92,9 +105,9 @@ const exportedMethods = {
     if (typeof discription !== "string" || isEmptyOrSpaces(discription)) {
       throw "Please provide a valid discription!";
     }
-    if (!Array.isArray(imageArray)){   //........................todo
+    if (!Array.isArray(imageArray)) {   //........................todo
       throw "Please provide a valid image!";
-    } 
+    }
     if (typeof price !== "string") {
       throw "Please provide a valid price!";
     }
@@ -165,7 +178,7 @@ const exportedMethods = {
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
       const newId = newInsertInformation.insertedId;
-      
+
       await users.addPostToUser(userId, newId);
       return await this.getPostById(newId);
     } catch (e) {

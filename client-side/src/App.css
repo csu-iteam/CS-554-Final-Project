@@ -31,6 +31,7 @@ input {
 .App-header {
 	background-color: #336699;
 	padding: 20px;
+	height: 113px;
 }
 
 .App-title {
@@ -140,4 +141,8 @@ dd {
 .nothing-in-this-type {
 	color: #CC0033;
 	font-weight: bold;
+}
+
+.home-btn{
+	float: left;
 }
