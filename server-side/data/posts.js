@@ -96,7 +96,10 @@ const exportedMethods = {
     if (!useremail) {
       throw 'Add post failed, need provide user ID';
     }
-    if (typeof tag !== "string" || isEmptyOrSpaces(tag)) {
+    // if (typeof tag !== "string" || isEmptyOrSpaces(tag)) {
+    //   throw "Please provide a valid tag!";
+    // }
+    if (!Array.isArray(tag)) {
       throw "Please provide a valid tag!";
     }
     if (typeof title !== "string" || isEmptyOrSpaces(title)) {
