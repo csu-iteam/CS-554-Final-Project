@@ -62,6 +62,7 @@ const Post = (props) => {
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
     const [badRequest, setBadRequest] = useState(false);
+    const [followState, setFollowState] = useState(0);//0 seller 1 unfollow 2 follow
     const classes = useStyles();
 
     useEffect(() => {
@@ -89,6 +90,20 @@ const Post = (props) => {
         fetchData();
     }, [props.match.params.id]);
 
+    useEffect(() => {
+        async function changeFollowState(userId, posrtId) {
+            if (followState == 1) {
+                await axios.get(`http://localhost:3008/posts/follow/${userId}/${posrtId}`);
+            } else if (followState == 2) {
+                await axios.get(`http://localhost:3008/posts/unFollow/${userId}/${posrtId}`);
+            }
+        }
+        if (postData) {
+            console.log('x');
+            changeFollowState(cookie.load('current_id'), postData._id);
+        }
+    }, [followState]);
+
     function generateTag(tag) {
         return (
             <Chip label={tag} color='primary' />
@@ -112,6 +127,21 @@ const Post = (props) => {
         return false;
     }
 
+    // async function follow(userId,posrtId){
+    //     await axios.get(`http://localhost:3008/follow/${userId}/${posrtId}`);
+    //     console.log('f')
+
+    //     followButton= <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={unfollow(cookie.load('current_id'),postData._id)}>Cancel Follow</Button>
+    // }
+
+    // async function unfollow(userId,posrtId){
+    //     await axios.get(`http://localhost:3008/unFollow/${userId}/${posrtId}`);
+    //     followButton=<Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={follow(cookie.load('current_id'),postData._id)}>Follow</Button>
+    // }
+
+    //unfollow(cookie.load('current_id'),postData._id)
+    //follow(cookie.load('current_id'),postData._id)
+
     function generateFollow(userId, current_post) {
         if (isSeller(userId, current_post)) {
             return (
@@ -120,10 +150,10 @@ const Post = (props) => {
         }
         else if (isFollowed(userId, current_post)) {
             return (
-                <Button variant="contained" color="primary" startIcon={<StarIcon />}>Cancel Follow</Button>
+                <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={() => { setFollowState(2) }}>Cancel Follow</Button>
             );
         } else return (
-            <Button variant="outlined" color="primary" startIcon={<StarOutIcon />}>Follow</Button>
+            <Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={() => { setFollowState(1) }}>Follow</Button>
         );
     }
     let followButton = "";

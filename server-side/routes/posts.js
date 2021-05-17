@@ -213,7 +213,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.get('follow/:userId/:postId', async (req, res) => {
+router.get('/follow/:userId/:postId', async (req, res) => {
   let userId = req.params.userId;
   let postId = req.params.postId;
   try {
@@ -224,7 +224,7 @@ router.get('follow/:userId/:postId', async (req, res) => {
   }
 });
 
-router.get('unFollow/:userId/:postId', async (req, res) => {
+router.get('/unFollow/:userId/:postId', async (req, res) => {
   let userId = req.params.userId;
   let postId = req.params.postId;
   try {

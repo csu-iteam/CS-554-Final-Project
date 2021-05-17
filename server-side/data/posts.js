@@ -265,9 +265,10 @@ const exportedMethods = {
   async follow(postId, userId) {
     let postInfo = await this.getPostById(postId);
     const postCollection = await posts();
+
     const updateInfo = await postCollection.updateOne(
-      { _id: postId },
-      { $addToSet: { followers: ObjectId(userId) } }
+      { _id: ObjectId(postId) },
+      { $addToSet: { followers: userId } }
     );
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
       throw "Update failed";
@@ -281,8 +282,8 @@ const exportedMethods = {
     let currentPost = await this.getPostById(postId);
     const postCollection = await posts();
     const updateInfo = await postCollection.updateOne(
-      { _id: postId },
-      { $pull: { followers: ObjectId(userId) } }
+      { _id: ObjectId(postId) },
+      { $pull: { followers: userId } }
     );
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
       throw 'Update failed';

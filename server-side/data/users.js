@@ -140,14 +140,18 @@ let exportedMethods = {
   async addFollowToUser(userId, postId) {
     let userInfo = await this.getUserById(userId);
     const userCollection = await users();
-    const updateInfo = await userCollection.updateOne(
-      { _id: userId },
-      { $addToSet: { follows: ObjectId(postId) } }
-    );
-    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
-      throw "Update failed";
+    try {
+      const updateInfo = await userCollection.updateOne(
+        { _id: userId },
+        { $addToSet: { follows: ObjectId(postId) } }
+      );
+      if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
+        throw "Update failed";
+      }
+      return await this.getUserById(userId);
+    } catch (e) {
+      console.log(e);
     }
-    return await this.getUserById(userId);
   },
 
   async removeFollowFromUser(userId, postId) {
