@@ -18,7 +18,7 @@ async function insertImage(imgbase64head) {
 
 async function getImageById(id) {
     const imageCollection = await images();
-    const image = await imageCollection.images({ _id: ObjectId(id) });
+    const image = await imageCollection.findOne({ _id: ObjectId(id) });
     if (!image) throw 'image not found';
     return image;
 }

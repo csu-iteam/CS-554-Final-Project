@@ -92,9 +92,10 @@ const Post = (props) => {
         );
     }
 
-    let tags = postData && postData.tag.map((tag) => {
-        return generateTag(tag);
-    });
+    // let tags = postData && postData.tag.map((tag) => {
+    //     return generateTag(tag);
+    // });
+    let tags='';
 
     if (loading) {
         return (
@@ -111,7 +112,7 @@ const Post = (props) => {
     } else if (notFound) {
         return (
             <div>
-                <h2>404: character not found</h2>
+                <h2>404: post not found</h2>
             </div>
         );
     } else {
@@ -120,7 +121,7 @@ const Post = (props) => {
                 <CardHeader className={classes.titleHead} title={postData.title} />
                 <CardMedia className={classes.media} component="img"
                     image={
-                        postData.thumbnail && postData.thumbnail.path && postData.thumbnail.extension ? `${postData.thumbnail.path}/portrait_xlarge.${postData.thumbnail.extension}` : noImage
+                        postData && postData.imgbase64headArray ? `${postData.imgbase64headArray[0].imgbase64head}` : noImage
                     }
                     title="Item image" />
                 <CardContent>
