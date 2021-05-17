@@ -121,7 +121,7 @@ async getUserById(id) {
     return await this.getUserById(userId);
   },
 
-  //(done) remove user from post
+  //(done) remove post from user
   async removePostFromUser(userId, postId) {
     let currentUser = await this.getUserById(userId);
 

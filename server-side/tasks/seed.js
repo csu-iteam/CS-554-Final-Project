@@ -27,18 +27,24 @@ async function main() {
   const db = await dbConnection();
   await db.dropDatabase();
 
+
   let user1 = await users.addUser('111', '11111@stevens.edu', '12345678');
   let user2 = await users.addUser('222', '22222@stevens.edu', '12345678');
   let user3 = await users.addUser('333', '33333@stevens.edu', '12345678');
+
   // let post1_1 = await posts.addPost(user1._id.toString(),'111','111','111',[],100);
 
   // let post1 =  await posts.addPost(`133e3c23-e74a-42c7-93d1-6bb57793a8db`, 'computer', "jingwei computer", "discription", [], 1000)
   const jingwei = await users.addUser('Jingwei', 'jw@stevens.edu', 'ASecretPassword');
   const jwId = jingwei._id;
 
+
+
+
   const imgId = await data.images.insertImage('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAaVBMVEUAAAAkiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8kiP8AAABV2AGBAAAAIXRSTlMAAA0ZC5G5Hv6pFqoVCh1K2WqNVfng+KZU5msMUvEmHE2Aq2qFAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAAAZAAAAGQAD5bF3QAAAAd0SU1FB+UFEQ0xHp6SNpkAAABXSURBVBjTnc85AoAgEAPAjeKFeCKIitf/P2knrKXpJqlC9AZAkoJZZHnBXVaSu1bglsDX+GN896YVzNT1wxib9GTsrILJ2XtZt2Dyu7XmiE6e3ukrCcUDk3EEYb9x3BYAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDUtMTFUMDQ6MTk6MzUrMDA6MDAtZWOCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTEyLTI5VDA1OjUwOjIwKzAwOjAwSwhlzAAAACB0RVh0c29mdHdhcmUAaHR0cHM6Ly9pbWFnZW1hZ2ljay5vcme8zx2dAAAAY3RFWHRzdmc6Y29tbWVudAAgR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICDOSJALAAAAGHRFWHRUaHVtYjo6RG9jdW1lbnQ6OlBhZ2VzADGn/7svAAAAGHRFWHRUaHVtYjo6SW1hZ2U6OkhlaWdodAA0MDh3geHpAAAAF3RFWHRUaHVtYjo6SW1hZ2U6OldpZHRoADQwOORwsbQAAAAZdEVYdFRodW1iOjpNaW1ldHlwZQBpbWFnZS9wbmc/slZOAAAAF3RFWHRUaHVtYjo6TVRpbWUAMTYwOTIyMTAyMCoVzTwAAAARdEVYdFRodW1iOjpTaXplADEzMzFClyzsNgAAAFp0RVh0VGh1bWI6OlVSSQBmaWxlOi8vL2RhdGEvd3d3cm9vdC93d3cuZWFzeWljb24ubmV0L2Nkbi1pbWcuZWFzeWljb24uY24vZmlsZXMvMTMwLzEzMDExMDAucG5n8Fo4aQAAAABJRU5ErkJggg==')
 
-  await posts.addPost(
+  const p = await posts.addPost(
+
     jwId,
     ['currency exchange'],
     'Need US dollar',
@@ -48,7 +54,13 @@ async function main() {
   );
 
 
-  await posts.addPost(
+  console.log(p);
+
+
+
+
+  const p2 = await posts.addPost(
+
     jwId,
     ['furniture'],
     'Selling a queen size bed',
@@ -57,7 +69,7 @@ async function main() {
     '$100'
   );
 
-  await posts.addPost(
+  let p3 = await posts.addPost(
     jwId,
     ['bicycle'],
     'Selling a branded bicycle!',
@@ -66,7 +78,7 @@ async function main() {
     '$580'
   );
 
-  await posts.addPost(
+  let p4 = await posts.addPost(
     jwId,
     ['digital product'],
     'A high profile desktop PC!',
@@ -80,7 +92,7 @@ async function main() {
     '$4800(not decided yet)'
   );
 
-  await posts.addPost(
+  let p5 = await posts.addPost(
     jwId,
     ['digital product', 'furniture'],
     'Test double type',
