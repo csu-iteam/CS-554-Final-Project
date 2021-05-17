@@ -12,7 +12,6 @@ class MakeNewPost extends Component {
         price: ''
     };
 
-    
     handleSubmit = async e => {
         <script type="text/javascript"></script>
 
@@ -57,22 +56,37 @@ class MakeNewPost extends Component {
         } else {
             priceError.hidden = true;
         }
-        
+
         if (tagError.hidden === true && titleError.hidden === true && discriptionError.hidden === true && priceError.hidden === true) {
             let priceNum = Number(price.value);
-            axios.post(`http://localhost:3008/posts/makenewpostbyemail`, {
-                "useremail": currentEmail.value,
-                "tag": tag.value,
-                "title": title.value,
-                "discription": discription.value,
-                "price": priceNum
-            }).then(function (response) {
-                console.log("response: ", response);
-                if(response.status === 200){
-                    alert('Congratulations, post submit successful!');
-                    window.location.href = "/";
+
+            ////////////////////
+            let base64head = '';
+            if (window.FileReader) {
+                let file = e.target[6].files[0];
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = function (e) {
+                    base64head = reader.result;
+
+                    console.log(base64head)
+                    ////////////////
+                    axios.post(`http://localhost:3008/posts/makenewpostbyemail`, {
+                        "useremail": currentEmail.value,
+                        "tag": tag.value,
+                        "title": title.value,
+                        "discription": discription.value,
+                        "price": priceNum,
+                        "imgbase64head": base64head
+                    }).then(function (response) {
+                        console.log("response: ", response);
+                        if (response.status === 200) {
+                            alert('Congratulations, post submit successful!');
+                            window.location.href = "/";
+                        }
+                    }).catch(err => console.log(err))
                 }
-            }).catch(err => console.log(err))
+            }
         }
     }
 
@@ -90,7 +104,7 @@ class MakeNewPost extends Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <div hidden>
-                <input type="string" className="form-control" id="currentEmail" defaultValue={currentEmail} name="currentEmail" />{currentEmail}<div></div>
+                    <input type="string" className="form-control" id="currentEmail" defaultValue={currentEmail} name="currentEmail" />{currentEmail}<div></div>
                 </div>
                 <div className="center">
                     <label htmlFor="example1">tag:</label>
@@ -118,7 +132,7 @@ class MakeNewPost extends Component {
                         <input type="file" id="file_input" multiple />
                     </label>
                 </div>
-               
+
                 <br />
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>

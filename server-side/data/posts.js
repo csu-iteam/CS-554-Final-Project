@@ -68,7 +68,7 @@ const exportedMethods = {
   },
 
   //add post by user eamil  (done)   img todo
-  async addPostByUserEmail(useremail, tag, title, discription, price) {
+  async addPostByUserEmail(useremail, tag, title, discription,imageArray, price) {
     if (!useremail) {
       throw 'Add post failed, need provide user ID';
     }
@@ -81,9 +81,9 @@ const exportedMethods = {
     if (typeof discription !== "string" || isEmptyOrSpaces(discription)) {
       throw "Please provide a valid discription!";
     }
-    // if (!Array.isArray(img)){   ........................todo
-    //   throw "Please provide a valid image!";
-    // } 
+    if (!Array.isArray(imageArray)){   //........................todo
+      throw "Please provide a valid image!";
+    } 
     if (typeof price !== "number") {
       throw "Please provide a valid price!";
     }
@@ -99,14 +99,13 @@ const exportedMethods = {
       tag: tag,
       title: title,
       discription: discription,
-      img: [],               //.....................todo
+      img: imageArray,               //.....................todo
       price: price,
       time: timenow
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
       const newId = newInsertInformation.insertedId;
-
       await users.addPostToUser(userWhoPost._id, newId);
       return await this.getPostById(newId);
     } catch (e) {
