@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const postData = data.posts;
+const imageData=data.images;
 
 //Show the single post with id   (done)
 router.get('/:id', async (req, res) => {
@@ -79,13 +80,15 @@ router.post('/makenewpostbyemail', async (req, res) =>{
     res.status(400).json({ error: 'You must provide poster price' });
     return;
   }
-  // if (!blogPostData.img) {
-  //   res.status(400).json({ error: 'You must provide poster img' });
-  //   return;
-  // }
+  if (!blogPostData.imgbase64head) {
+    res.status(400).json({ error: 'You must provide poster img' });
+    return;
+  }
   try {
-    const { useremail, tag, title, discription, price } = blogPostData;
-    const newPost = await postData.addPostByUserEmail(useremail, tag, title, discription, price);
+    const { useremail, tag, title, discription, price,imgbase64head} = blogPostData;
+    const imageId=await imageData.insertImage(imgbase64head);
+    const imageArray=[imageId]
+    const newPost = await postData.addPostByUserEmail(useremail, tag, title, discription,imageArray, price);
     res.status(200).json(newPost);
   } catch (e) {
     res.status(500).json({ error: e });
@@ -111,7 +114,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: 'You must provide poster discription' });
     return;
   }
-  if (!blogPostData.img) {
+  if (!blogPostData.imgbase64head) {
     res.status(400).json({ error: 'You must provide poster img' });
     return;
   }
@@ -120,8 +123,10 @@ router.post('/', async (req, res) => {
     return;
   }
   try {
-    const { userId, tag, title, discription, img, price } = blogPostData;
-    const newPost = await postData.addPost(userId, tag, title, discription, img, price);
+    const { userId, tag, title, discription, price, imgbase64head } = blogPostData;
+    const imageId=await imageData.insertImage(imgbase64head);
+    const imageArray=[imageId]
+    const newPost = await postData.addPost(userId, tag, title, discription, imageArray, price);
     res.json(newPost);
   } catch (e) {
     res.status(500).json({ error: e });
