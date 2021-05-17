@@ -4,6 +4,7 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeSty
 import axios from 'axios';
 import noImage from '../img/no_image.jpg';
 
+
 import '../App.css';
 
 const useStyles = makeStyles({ //TODO: should be modified
@@ -54,9 +55,7 @@ const MyPost = (props) => {
                 let url = `http://localhost:3008/posts/getpostbyuseremail/${currentEmail}`;
                 const { data } = await axios.get(url,
                     { headers: { Accept: 'application/json' } });
-                console.log(data);
                 setPostData(data);
-                console.log(postData);
                 setLoading(false);
             } catch (error) {
                 console.log(error);
@@ -65,6 +64,8 @@ const MyPost = (props) => {
         fetchData();
     }, []
     );
+
+    
 
 
     const bulidCard = (post) => {
@@ -94,10 +95,12 @@ const MyPost = (props) => {
                                 <Typography variant='body3' color='textSecondary' component='p'>
                                     Release Time: {post.time}
                                 </Typography>
+                                
                             </CardContent>
                         </Link>
                     </CardActionArea>
                 </Card>
+                {/* <button className = {classes.button} id={post._id} onClick= {handleDelete} to={`/mypost/${currentEmail}`}>Off Shelf</button> */}
             </Grid>
         );
     };
@@ -121,7 +124,9 @@ const MyPost = (props) => {
                 <Grid container className={classes.grid} spacing={5}>
                     {card}
                 </Grid>
+                
             </div >
+            
         )
     }
 };

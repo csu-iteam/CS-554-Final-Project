@@ -3,6 +3,7 @@ const posts = mongoCollections.posts;
 const users = require('./users');
 const images=require('./image');
 const uuid = require('uuid/v4');
+
 var { ObjectId } = require('mongodb');
 
 
@@ -94,7 +95,7 @@ const exportedMethods = {
     if (!Array.isArray(imageArray)){   //........................todo
       throw "Please provide a valid image!";
     } 
-    if (typeof price !== "number") {
+    if (typeof price !== "string") {
       throw "Please provide a valid price!";
     }
     const postCollection = await posts();
@@ -111,7 +112,8 @@ const exportedMethods = {
       discription: discription,
       img: imageArray,               //.....................todo
       price: price,
-      time: timenow
+      time: timenow,
+      bought: false
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
@@ -157,12 +159,13 @@ const exportedMethods = {
       discription: discription,
       img: img,
       price: price,
-      time: timenow
+      time: timenow,
+      bought: false
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
       const newId = newInsertInformation.insertedId;
-
+      
       await users.addPostToUser(userId, newId);
       return await this.getPostById(newId);
     } catch (e) {
