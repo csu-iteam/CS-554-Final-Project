@@ -208,7 +208,11 @@ const Post = (props) => {
                     <Typography className={classes.secondary_container}>
                         <label className={classes.secondary_title}>Email:</label>{postData.userWhoPost.email}
                     </Typography>
-                    <Button variant="contained" color='primary'>Contact with him/her</Button>
+                    <Link to={"/chat/" + postData.userWhoPost.email}>
+                        <Button variant="contained" color='primary'>
+                            Contact with him/her
+                        </Button>
+                    </Link>
                 </CardContent>
             </Card>
         );
