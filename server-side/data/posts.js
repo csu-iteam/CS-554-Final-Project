@@ -37,7 +37,7 @@ const exportedMethods = {
   async getAllPosts() {
     try {
       const postCollection = await posts();
-      const allPost = await postCollection.find({ bought: false }).toArray();
+      const allPost = await postCollection.find({ sold: false }).toArray();
       if (!allPost) throw 'Posts not found';
       ////convert img array to imgbase64head array
       await Promise.all(allPost.map(async (post) => {
@@ -61,7 +61,7 @@ const exportedMethods = {
     try {
       if (!tag) throw 'No tag provided';
       const postCollection = await posts();
-      const typedPost = await postCollection.find({ tag: tag, bought: false }).toArray();
+      const typedPost = await postCollection.find({ tag: tag, sold: false }).toArray();
       if (!typedPost) throw 'Posts not found';
       ////convert img array to imgbase64head array
       await Promise.all(typedPost.map(async (post) => {
