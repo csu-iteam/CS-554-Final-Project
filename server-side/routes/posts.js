@@ -316,7 +316,6 @@ router.get('/soldPost/:postId', async (req, res) => {
 
 router.get('/backSoldPost/:postId',async(req,res)=>{
   let postId = req.params.postId;
-  console.log('z')
   try {
     await postData.backSold(postId);
     res.sendStatus(200);

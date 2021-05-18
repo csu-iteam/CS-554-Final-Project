@@ -56,7 +56,8 @@ const useStyles = makeStyles({
         color: '#000'
     },
     followButton: {
-        float: 'right'
+        float: 'right',
+        marginLeft:'5px'
     }
 });
 
@@ -66,11 +67,12 @@ const Post = (props) => {
     const [notFound, setNotFound] = useState(false);
     const [badRequest, setBadRequest] = useState(false);
     const [followState, setFollowState] = useState(0);//0 seller 1 unfollow 2 follow
-    const [soldState, setSoldState] = useState(false);
+    const [soldState, setSoldState] = useState(undefined);
     const classes = useStyles();
     let followButton = "";
     let contactButton = "";
     let soldButton = "";
+    let soldSignal="";
 
     useEffect(() => {
         console.log('useEffect fired item');
@@ -207,12 +209,14 @@ const Post = (props) => {
         }
     }
 
-    function generateSold(uesrId, postId) {
-        if (isSeller(uesrId,postId)) {
-            if (soldState) {
+    function generateSold(uesrId, postData) {
+        if (isSeller(uesrId,postData)) {
+            if (postData.sold) {
+                soldSignal=(<Button className={classes.followButton} variant="contained" color='primary' disabled>Sell out</Button>)
                 return (<Button variant="contained" color='primary' onClick={()=>{setSoldState(false)}}>Put it back up</Button>);
             } else {
-                return (<Button variant="contained" color='primary' onClick={()=>{setSoldState(true)}} >Off the shelf</Button>);
+                soldSignal=(<Button className={classes.followButton} variant="contained" color='primary' hidden>Sell out</Button>)
+                return (<Button variant="contained" color='secondary' onClick={()=>{setSoldState(true)}} >Off the shelf</Button>);
             }
         } else return (
             <Button variant="contained" color='primary' hidden>no ownership of post</Button>
@@ -222,7 +226,6 @@ const Post = (props) => {
     if (postData) {
         //setSoldState(postData.sold);
         soldButton = generateSold(cookie.load('current_id'), postData);
-
     }
 
     if (postData && postData.userWhoPost) {
@@ -258,10 +261,10 @@ const Post = (props) => {
                     title="Item image" />
                 <CardContent>
                     <Typography className={classes.secondary_container}>
-                        {tags}{followButton}
+                        {tags}{soldSignal}{followButton}
                     </Typography>
                     <Typography className={classes.secondary_container}>
-                        <label className={classes.secondary_title}>Price:</label>{postData.price}
+                        <label className={classes.secondary_title}>Price: {postData.price}</label>
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="div" className={classes.secondary_container}>
                         <label className={classes.secondary_title}>Description:</label>
