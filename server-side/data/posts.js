@@ -35,23 +35,50 @@ const exportedMethods = {
 
 
   //(done)
+  async getAllPosts() {
+    try {
+      const postCollection = await posts();
+      const allPost = await postCollection.find({ bought: false }).toArray();
+      if (!allPost) throw 'Posts not found';
+      ////convert img array to imgbase64head array
+      await Promise.all(allPost.map(async (post) => {
+        const imgArray = post.img;
+        const imgbase64headArray = [];
+        for (i = 0; i < imgArray.length; i++) {
+          let imgbase64head = await images.getImageById(imgArray[i]);
+          imgbase64headArray.push(imgbase64head);
+        }
+        post.imgbase64headArray = imgbase64headArray;
+      }))
+      /////
+      return allPost;
+    } catch (e) {
+      throw 'get all post failed'
+    }
+  },
+
+  //(done)
   async getPostsByTag(tag) {
-    if (!tag) throw 'No tag provided';
-    const postCollection = await posts();
-    const allPost = await postCollection.find({ tag: tag }).toArray();
-    if (!allPost) throw 'Posts not found';
-    await Promise.all(allPost.map(async (post) => {
-      const imgArray = post.img;
-      const imgbase64headArray = [];
-      for (i = 0; i < imgArray.length; i++) {
-        let imgbase64head = await images.getImageById(imgArray[i]);
-        imgbase64headArray.push(imgbase64head);
-      }
-      post.imgbase64headArray = imgbase64headArray;
-    }))
-
-    return allPost;
-
+    try {
+      if (!tag) throw 'No tag provided';
+      const postCollection = await posts();
+      const typedPost = await postCollection.find({ tag: tag, bought: false }).toArray();
+      if (!typedPost) throw 'Posts not found';
+      ////convert img array to imgbase64head array
+      await Promise.all(typedPost.map(async (post) => {
+        const imgArray = post.img;
+        const imgbase64headArray = [];
+        for (i = 0; i < imgArray.length; i++) {
+          let imgbase64head = await images.getImageById(imgArray[i]);
+          imgbase64headArray.push(imgbase64head);
+        }
+        post.imgbase64headArray = imgbase64headArray;
+      }))
+      /////
+      return typedPost;
+    } catch (e) {
+      throw 'get post by tag failed'
+    }
   },
 
   //(done)
