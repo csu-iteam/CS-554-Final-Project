@@ -37,7 +37,8 @@ let exportedMethods = {
       password: bcrypt_password,
       _id: uuid(),
       posts: posts,
-      chatUserId: newChatUserCreated.id
+      chatUserId: newChatUserCreated.id,
+      follows: []
     };
     const newInsertInformation = await userCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
@@ -45,41 +46,41 @@ let exportedMethods = {
     return await this.getUserById(newInsertInformation.insertedId);
   },
 
-    //(done)
-async getUserByEmail(useremail){
-  if (typeof useremail != "string") {
-    throw "the email typy is error.";
-  }
-  const userCollection = await users();
-  const user = await userCollection.findOne({ email: useremail });
-  if (user === null) {
-    throw "The user is not exist.";
-  }
-  return user;
-},
+  //(done)
+  async getUserByEmail(useremail) {
+    if (typeof useremail != "string") {
+      throw "the email typy is error.";
+    }
+    const userCollection = await users();
+    const user = await userCollection.findOne({ email: useremail });
+    if (user === null) {
+      throw "The user is not exist.";
+    }
+    return user;
+  },
 
-// done
-async judgeEmail(useremail){
-  const userCollection = await users();
-  const user = await userCollection.findOne({ email: useremail });
-  if (user === null) {
-    return false;
-  }
-  return true;
-},
+  // done
+  async judgeEmail(useremail) {
+    const userCollection = await users();
+    const user = await userCollection.findOne({ email: useremail });
+    if (user === null) {
+      return false;
+    }
+    return true;
+  },
 
   // get user by ID  (done) 
-async getUserById(id) {
-  if (typeof id != "string") {
-    throw "the id typy is error.";
-  }
-  const userCollection = await users();
-  const user = await userCollection.findOne({ _id: id });
-  if (user === null) {
-    throw "The user is not exist.";
-  }
-  return user;
-},
+  async getUserById(id) {
+    if (typeof id != "string") {
+      throw "the id typy is error.";
+    }
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: id });
+    if (user === null) {
+      throw "The user is not exist.";
+    }
+    return user;
+  },
 
 
   async removeUser(id) {
@@ -117,10 +118,10 @@ async getUserById(id) {
     let userInfo = await this.getUserById(userId);
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
-      {_id: userId},
-      {$addToSet: {posts: ObjectId(postId)} }
+      { _id: userId },
+      { $addToSet: { posts: ObjectId(postId) } }
     );
-    if(!updateInfo.matchedCount && !updateInfo.modifiedCount){
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
       throw "Update failed";
     }
     return await this.getUserById(userId);
@@ -133,9 +134,39 @@ async getUserById(id) {
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
       { _id: userId },
-      { $pull: { posts: ObjectId(postId)} }
+      { $pull: { posts: ObjectId(postId) } }
     );
-    if (!updateInfo.matchedCount && !updateInfo.modifiedCount){
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
+      throw 'Update failed';
+    }
+  },
+
+  ///////
+  async addFollowToUser(userId, postId) {
+    let userInfo = await this.getUserById(userId);
+    const userCollection = await users();
+    try {
+      const updateInfo = await userCollection.updateOne(
+        { _id: userId },
+        { $addToSet: { follows: ObjectId(postId) } }
+      );
+      if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
+        throw "Update failed";
+      }
+      return await this.getUserById(userId);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async removeFollowFromUser(userId, postId) {
+    let currentUser = await this.getUserById(userId);
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+      { _id: userId },
+      { $pull: { follows: ObjectId(postId) } }
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
       throw 'Update failed';
     }
   },

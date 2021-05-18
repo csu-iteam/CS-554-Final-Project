@@ -1,7 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const posts = mongoCollections.posts;
 const users = require('./users');
-const images=require('./image');
+const images = require('./image');
 const uuid = require('uuid/v4');
 
 var { ObjectId } = require('mongodb');
@@ -32,17 +32,26 @@ function getNowFormatDate() {
 
 
 const exportedMethods = {
-  //(done)
-  async getAllPosts() {
-    const postCollection = await posts();
-    return await postCollection.find({}).toArray();
-  },
+
 
   //(done)
   async getPostsByTag(tag) {
     if (!tag) throw 'No tag provided';
     const postCollection = await posts();
-    return await postCollection.find({ tag: tag }).toArray();
+    const allPost = await postCollection.find({ tag: tag }).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+
+    return allPost;
+
   },
 
   //(done)
@@ -53,12 +62,45 @@ const exportedMethods = {
     return await postCollection.find({ "userWhoPost.name": username }).toArray();
   },
 
+
   //(done)
   async getPostsByUserEmail(currentEmail) {
     if (!currentEmail) throw 'no user email provide';
     const postCollection = await posts();
-    return await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
+    const allPost = await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+
+    return allPost;
   },
+
+
+    //(done)
+    async getAllPosts() {
+      const postCollection = await posts();
+      const allPost = await postCollection.find({}).toArray();
+      if (!allPost) throw 'Posts not found';
+      ////convert img array to imgbase64head array
+      await Promise.all(allPost.map(async (post) => {
+        const imgArray = post.img;
+        const imgbase64headArray = [];
+        for (i = 0; i < imgArray.length; i++) {
+          let imgbase64head = await images.getImageById(imgArray[i]);
+          imgbase64headArray.push(imgbase64head);
+        }
+        post.imgbase64headArray = imgbase64headArray;
+      }))
+      /////
+      return allPost;
+    },
 
   //(done)
   async getPostById(id) {
@@ -67,23 +109,26 @@ const exportedMethods = {
     const post = await postCollection.findOne({ _id: ObjectId(id) });
     if (!post) throw 'Post not found';
     //////convert img array to imgbase64head array
-    const imgArray=post.img;
-    const imgbase64headArray=[];
-    for (i=0;i<imgArray.length;i++){
-      let imgbase64head=await images.getImageById(imgArray[i]);
+    const imgArray = post.img;
+    const imgbase64headArray = [];
+    for (i = 0; i < imgArray.length; i++) {
+      let imgbase64head = await images.getImageById(imgArray[i]);
       imgbase64headArray.push(imgbase64head);
     }
-    post.imgbase64headArray=imgbase64headArray;
+    post.imgbase64headArray = imgbase64headArray;
     /////
     return post;
   },
 
   //add post by user eamil  (done)   img todo
-  async addPostByUserEmail(useremail, tag, title, discription,imageArray, price) {
+  async addPostByUserEmail(useremail, tag, title, discription, imageArray, price) {
     if (!useremail) {
       throw 'Add post failed, need provide user ID';
     }
-    if (typeof tag !== "string" || isEmptyOrSpaces(tag)) {
+    // if (typeof tag !== "string" || isEmptyOrSpaces(tag)) {
+    //   throw "Please provide a valid tag!";
+    // }
+    if (!Array.isArray(tag)) {
       throw "Please provide a valid tag!";
     }
     if (typeof title !== "string" || isEmptyOrSpaces(title)) {
@@ -92,9 +137,9 @@ const exportedMethods = {
     if (typeof discription !== "string" || isEmptyOrSpaces(discription)) {
       throw "Please provide a valid discription!";
     }
-    if (!Array.isArray(imageArray)){   //........................todo
+    if (!Array.isArray(imageArray)) {   //........................todo
       throw "Please provide a valid image!";
-    } 
+    }
     if (typeof price !== "string") {
       throw "Please provide a valid price!";
     }
@@ -113,7 +158,9 @@ const exportedMethods = {
       img: imageArray,               //.....................todo
       price: price,
       time: timenow,
-      bought: false
+      bought: false,
+      //////follower buyer list 
+      followers: []
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
@@ -165,7 +212,7 @@ const exportedMethods = {
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
       const newId = newInsertInformation.insertedId;
-      
+
       await users.addPostToUser(userId, newId);
       return await this.getPostById(newId);
     } catch (e) {
@@ -243,6 +290,35 @@ const exportedMethods = {
     return await this.getPostsByTag(newTag);
   },
 
+  // follow function post.followers + follow user id /user.follows+ followed post.id
+  async follow(postId, userId) {
+    let postInfo = await this.getPostById(postId);
+    const postCollection = await posts();
+
+    const updateInfo = await postCollection.updateOne(
+      { _id: ObjectId(postId) },
+      { $addToSet: { followers: userId } }
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
+      throw "Update failed";
+    }
+    await users.addFollowToUser(userId, postId);
+    return await this.getPostById(postId);
+  },
+
+  //cancel follow function
+  async cancelFollow(postId, userId) {
+    let currentPost = await this.getPostById(postId);
+    const postCollection = await posts();
+    const updateInfo = await postCollection.updateOne(
+      { _id: ObjectId(postId) },
+      { $pull: { followers: userId } }
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
+      throw 'Update failed';
+    }
+    await users.removeFollowFromUser(userId, postId);
+  }
 
 };
 

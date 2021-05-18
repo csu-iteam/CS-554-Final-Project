@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeStyles } from '@material-ui/core';
 import axios from 'axios';
 import noImage from '../img/no_image.jpg';
-
+import cookie from 'react-cookies'
 
 import '../App.css';
 
@@ -46,6 +46,13 @@ const MyPost = (props) => {
 
     let card = null;
 
+    useEffect(() => {
+        let username = cookie.load('current_username');
+        if(!username){
+            window.location.href = "/login";
+        }
+    }, []
+    );
 
     //get data from database
     useEffect(() => {
@@ -74,11 +81,10 @@ const MyPost = (props) => {
                 <Card className={classes.card} variant='outlined'>
                     <CardActionArea>
                         <Link to={`/post/${post._id}`}>
-                            <CardMedia
+                        <CardMedia
                                 className={classes.media}
                                 component='img'
-                                //TODO: image={post.thumbnail ? `${post.thumbnail.path}/portrait_incredible.${post.thumbnail.extension}` : noImage} haven't create img upload
-                                image={noImage}
+                                image={post && post.imgbase64headArray ? `${post.imgbase64headArray[0].imgbase64head}` : noImage}
                                 title='post image'
                             />
 
@@ -95,7 +101,6 @@ const MyPost = (props) => {
                                 <Typography variant='body3' color='textSecondary' component='p'>
                                     Release Time: {post.time}
                                 </Typography>
-                                
                             </CardContent>
                         </Link>
                     </CardActionArea>

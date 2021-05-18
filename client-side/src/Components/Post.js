@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import noImage from '../img/no_image.jpg';
+import cookie from 'react-cookies'
 import {
     makeStyles,
     Card,
@@ -11,6 +12,8 @@ import {
     Button,
     Chip
 } from '@material-ui/core';
+import StarIcon from '@material-ui/icons/Star';
+import StarOutIcon from '@material-ui/icons/StarOutline';
 import '../App.css';
 import axios from 'axios';
 
@@ -59,6 +62,7 @@ const Post = (props) => {
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
     const [badRequest, setBadRequest] = useState(false);
+    const [followState, setFollowState] = useState(0);//0 seller 1 unfollow 2 follow
     const classes = useStyles();
 
     useEffect(() => {
@@ -86,6 +90,20 @@ const Post = (props) => {
         fetchData();
     }, [props.match.params.id]);
 
+    useEffect(() => {
+        async function changeFollowState(userId, posrtId) {
+            if (followState == 1) {
+                await axios.get(`http://localhost:3008/posts/follow/${userId}/${posrtId}`);
+            } else if (followState == 2) {
+                await axios.get(`http://localhost:3008/posts/unFollow/${userId}/${posrtId}`);
+            }
+        }
+        if (postData) {
+            console.log('x');
+            changeFollowState(cookie.load('current_id'), postData._id);
+        }
+    }, [followState]);
+
     function generateTag(tag) {
         return (
             <Chip label={tag} color='primary' />
@@ -96,6 +114,52 @@ const Post = (props) => {
         return generateTag(tag);
     });
     // let tags='';
+    function isSeller(userId, current_post) {
+        if (userId == current_post.userWhoPost.id) return true;
+        else return false;
+    }
+
+    function isFollowed(userId, current_post) {
+        let followers = current_post.followers;
+        for (let i = 0; i < followers.length; i++) {
+            if (userId == followers[i]) return true;
+        }
+        return false;
+    }
+
+    // async function follow(userId,posrtId){
+    //     await axios.get(`http://localhost:3008/follow/${userId}/${posrtId}`);
+    //     console.log('f')
+
+    //     followButton= <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={unfollow(cookie.load('current_id'),postData._id)}>Cancel Follow</Button>
+    // }
+
+    // async function unfollow(userId,posrtId){
+    //     await axios.get(`http://localhost:3008/unFollow/${userId}/${posrtId}`);
+    //     followButton=<Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={follow(cookie.load('current_id'),postData._id)}>Follow</Button>
+    // }
+
+    //unfollow(cookie.load('current_id'),postData._id)
+    //follow(cookie.load('current_id'),postData._id)
+
+    function generateFollow(userId, current_post) {
+        if (isSeller(userId, current_post)) {
+            return (
+                <Button variant="contained" disabled color="secondery">You are the seller</Button>
+            );
+        }
+        else if (isFollowed(userId, current_post)) {
+            return (
+                <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={() => { setFollowState(2) }}>Cancel Follow</Button>
+            );
+        } else return (
+            <Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={() => { setFollowState(1) }}>Follow</Button>
+        );
+    }
+    let followButton = "";
+    if (postData && postData.userWhoPost && postData.followers) {
+        followButton = generateFollow(cookie.load('current_id'), postData);
+    }
 
     if (loading) {
         return (
@@ -126,7 +190,7 @@ const Post = (props) => {
                     title="Item image" />
                 <CardContent>
                     <Typography className={classes.secondary_container}>
-                        {tags}
+                        {tags}{followButton}
                     </Typography>
                     <Typography className={classes.secondary_container}>
                         <label className={classes.secondary_title}>Price:</label>{postData.price}

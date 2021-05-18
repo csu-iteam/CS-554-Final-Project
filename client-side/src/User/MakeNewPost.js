@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../App.css';
-
+import cookie from 'react-cookies'
 import MultiSelect from "react-multi-select-component";
 
 const options = [
-    { label: "A", value: "A" },
-    { label: "B", value: "B" },
-    { label: "C", value: "C"},
-    { label: "D", value: "D" },
-    { label: "E", value: "E" },
-    { label: "F", value: "F" },
-    { label: "G", value: "G" },
-    { label: "H", value: "H" },
-    { label: "I", value: "I" },
-  ];
+    { label: "Electronics", value: "Electronics" },
+    { label: "Computers", value: "Computers" },
+    { label: "Smart Home", value: "Smart Home" },
+    { label: "Home,Garden,Tools", value: "Home,Garden,Tools" },
+    { label: "Pet Supplies", value: "Pet Supplies" },
+    { label: "Beauty,Health", value: "Beauty,Health" },
+    { label: "Handmade", value: "Handmade" },
+    { label: "Books", value: "Books" },
+    { label: "Outdoors", value: "Outdoors" },
+    { label: "MoneyChange", value: "MoneyChange" },
+    { label: "Others", value: "Others" },
+];
 
 class MakeNewPost extends Component {
 
-    
+
     state = {
         tag: [],
         title: '',
@@ -27,16 +29,21 @@ class MakeNewPost extends Component {
         selected: []
     };
 
-    
-    
+    componentWillMount(){
+        var username= cookie.load('current_username');
+        if(!username){
+            window.location.href = "/login";
+        }
+    }
+
 
     handleSubmit = async e => {
         <script type="text/javascript"></script>
 
         let isNullFormate = "^[ ]+$";
         let isNullCheck = new RegExp(isNullFormate);
-
-        let selected = document.getElementById('selected');
+        let { selected } = this.state;
+        //let selected = document.getElementById('selected');
         let selectedError = document.getElementById('selectedError');
         let title = document.getElementById('title');
         let titleError = document.getElementById('titleError');
@@ -46,8 +53,7 @@ class MakeNewPost extends Component {
         let priceError = document.getElementById('priceError');
         let currentEmail = document.getElementById('currentEmail');
         e.preventDefault();
-
-        if (!selected) {
+        if (selected.length <= 0) {
             selectedError.hidden = false;
             selectedError.innerHTML = 'Please enter valid tag.';
         } else {
@@ -76,7 +82,7 @@ class MakeNewPost extends Component {
         }
 
         if (selectedError.hidden === true && titleError.hidden === true && discriptionError.hidden === true && priceError.hidden === true) {
-         
+
 
             ////////////////////
             let base64head = '';
@@ -91,7 +97,7 @@ class MakeNewPost extends Component {
                     ////////////////
                     axios.post(`http://localhost:3008/posts/makenewpostbyemail`, {
                         "useremail": currentEmail.value,
-                        "tag": selected.value,
+                        "tag": selected.map((x) => { return x.value }),
                         "title": title.value,
                         "discription": discription.value,
                         "price": price.value,
@@ -121,23 +127,23 @@ class MakeNewPost extends Component {
         const currentEmail = this.props.match.params.currentEmail;
         const { selected, title, discription, price } = this.state;
 
-          
+
         return (
             <form onSubmit={this.handleSubmit}>
-                
+
                 {/* <MutiTags id="tag" />
                 <MutiTags bgcolor={this.state.bgcolor} changeColor={(color)=>{this.bgChange(color)}} /> */}
-                <div  className="center" >
+                <div className="center" >
                     <p>Select Tag:</p>
-                <MultiSelect
-                    options={options}
-                    value={selected}
-                    onChange={selected =>this.setState({selected})}
-                    labelledBy="Select"
-                    id="selected"
-                />
+                    <MultiSelect
+                        options={options}
+                        value={selected}
+                        onChange={selected => this.setState({ selected })}
+                        labelledBy="Select"
+                        id="selected"
+                    />
                 </div><div id="selectedError" className="error" hidden></div>
-              
+
 
 
 
@@ -168,7 +174,7 @@ class MakeNewPost extends Component {
                 {/* <p>todo  img</p> */}
                 <div className="center">
                     <label for="post-img" class="postInput">
-                        <button  type="submit" id="postImg">Upload IMG</button>
+                        <button type="submit" id="postImg">Upload IMG</button>
                         <input type="file" id="file_input" multiple />
                     </label>
                 </div>
