@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../App.css';
-
+import cookie from 'react-cookies'
 import MultiSelect from "react-multi-select-component";
 
 const options = [
@@ -29,7 +29,12 @@ class MakeNewPost extends Component {
         selected: []
     };
 
-
+    componentWillMount(){
+        var username= cookie.load('current_username');
+        if(!username){
+            window.location.href = "/login";
+        }
+    }
 
 
     handleSubmit = async e => {

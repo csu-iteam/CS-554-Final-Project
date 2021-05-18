@@ -11,6 +11,13 @@ class Profile extends Component {
         userId: cookie.load('current_id')
     };
 
+    componentWillMount(){
+        var username= cookie.load('current_username');
+        if(!username){
+            window.location.href = "/login";
+        }
+    }
+
     handleSubmit = async e => {
         <script type="text/javascript"></script>
         let isNullFormate = "^[ ]+$";
