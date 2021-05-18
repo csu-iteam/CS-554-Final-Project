@@ -36,7 +36,7 @@ router.get('/tag/:tag', async (req, res, next) => {
 router.get('/tag/:tag', async (req, res) => {
   try {
     const postList = await postData.getPostsByTag(req.params.tag);
-    await client.setAsync(req.params.tag, JSON.stringify(postList));
+    await client.setAsync(req.params.tag, JSON.stringify(postList), 'EX', 5); // set EX in 5 secs, prevent user keeps refreshing page to make pressure to DB, and avoid new post cannot be updated.
     console.log(req.params.tag + ' post data from DB');
     res.json(postList);
   } catch (e) {
@@ -61,7 +61,7 @@ router.get('/', async (req, res, next) => {
 router.get('/', async (req, res) => {
   try {
     const postList = await postData.getAllPosts();
-    await client.setAsync('all', JSON.stringify(postList));
+    await client.setAsync('all', JSON.stringify(postList), 'EX', 5); // set EX in 5 secs, prevent user keeps refreshing page to make pressure to DB, and avoid new post cannot be updated.
     console.log('all post data from DB');
     res.json(postList);
   } catch (e) {
