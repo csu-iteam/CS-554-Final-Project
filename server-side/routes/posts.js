@@ -36,7 +36,7 @@ router.get('/tag/:tag', async (req, res, next) => {
 router.get('/tag/:tag', async (req, res) => {
   try {
     const postList = await postData.getPostsByTag(req.params.tag);
-    await client.setAsync(req.params.tag, JSON.stringify(postList));
+    await client.setAsync(req.params.tag, JSON.stringify(postList), 'EX', 5); // set EX in 5 secs, prevent user keeps refreshing page to make pressure to DB, and avoid new post cannot be updated.
     console.log(req.params.tag + ' post data from DB');
     res.json(postList);
   } catch (e) {
@@ -61,7 +61,7 @@ router.get('/', async (req, res, next) => {
 router.get('/', async (req, res) => {
   try {
     const postList = await postData.getAllPosts();
-    await client.setAsync('all', JSON.stringify(postList));
+    await client.setAsync('all', JSON.stringify(postList), 'EX', 5); // set EX in 5 secs, prevent user keeps refreshing page to make pressure to DB, and avoid new post cannot be updated.
     console.log('all post data from DB');
     res.json(postList);
   } catch (e) {
@@ -91,11 +91,11 @@ router.get('/getpostbyuser/:username', async (req, res) => {
   }
 });
 
-router.get('/search/:searchTerm', async (req, res) =>{
-  try{
+router.get('/search/:searchTerm', async (req, res) => {
+  try {
     const postList = await postData.getPostsBySearchTerm(req.params.searchTerm);
     res.json(postList);
-  }catch(e){
+  } catch (e) {
     res.status(500).json({ error: e });
   }
 })
@@ -111,7 +111,7 @@ router.get('/getpostbyuseremail/:currentEmail', async (req, res) => {
   }
 });
 
-router.get('/getmyfollowbyuseremail/:currentEmail',async(req,res)=>{
+router.get('/getmyfollowbyuseremail/:currentEmail', async (req, res) => {
   try {
     const postList = await postData.getMyFollowByUserEmail(req.params.currentEmail);
 
@@ -298,6 +298,26 @@ router.get('/unFollow/:userId/:postId', async (req, res) => {
   let postId = req.params.postId;
   try {
     await postData.cancelFollow(postId, userId);
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.get('/soldPost/:postId', async (req, res) => {
+  let postId = req.params.postId;
+  try {
+    await postData.setSold(postId);
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.get('/backSoldPost/:postId',async(req,res)=>{
+  let postId = req.params.postId;
+  try {
+    await postData.backSold(postId);
     res.sendStatus(200);
   } catch (e) {
     res.status(500).json({ error: e });

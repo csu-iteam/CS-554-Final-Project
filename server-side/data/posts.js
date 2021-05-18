@@ -37,7 +37,7 @@ const exportedMethods = {
   async getAllPosts() {
     try {
       const postCollection = await posts();
-      const allPost = await postCollection.find({ bought: false }).toArray();
+      const allPost = await postCollection.find({ sold: false }).toArray();
       if (!allPost) throw 'Posts not found';
       ////convert img array to imgbase64head array
       await Promise.all(allPost.map(async (post) => {
@@ -61,7 +61,7 @@ const exportedMethods = {
     try {
       if (!tag) throw 'No tag provided';
       const postCollection = await posts();
-      const typedPost = await postCollection.find({ tag: tag, bought: false }).toArray();
+      const typedPost = await postCollection.find({ tag: tag, sold: false }).toArray();
       if (!typedPost) throw 'Posts not found';
       ////convert img array to imgbase64head array
       await Promise.all(typedPost.map(async (post) => {
@@ -84,7 +84,7 @@ const exportedMethods = {
   async getPostsByUser(username) {
     if (!username) throw 'No username provided';
     const postCollection = await posts();
-    
+
     return await postCollection.find({ "userWhoPost.name": username }).toArray();
   },
 
@@ -108,11 +108,11 @@ const exportedMethods = {
   },
 
 
-  async getPostsBySearchTerm(searchTerm){
+  async getPostsBySearchTerm(searchTerm) {
     if (!searchTerm) throw 'No search term provided';
     const postCollection = await posts();
-    const query = {title: {$regex: ".*" + searchTerm + ".*"}};
-    const allPost= await postCollection.find(query).toArray();
+    const query = { title: { $regex: ".*" + searchTerm + ".*" } };
+    const allPost = await postCollection.find(query).toArray();
     if (!allPost) throw 'Posts not found';
     await Promise.all(allPost.map(async (post) => {
       const imgArray = post.img;
@@ -130,11 +130,11 @@ const exportedMethods = {
 
     if (!currentEmail) throw 'no user email provide';
     const postCollection = await posts();
-    let current_user= await users.getUserByEmail(currentEmail);
-    let myFollowIds=current_user.follows;
-    let allPost=await Promise.all(
-      myFollowIds.map(async (x)=>{
-        return await postCollection.findOne({_id: ObjectId(x)});
+    let current_user = await users.getUserByEmail(currentEmail);
+    let myFollowIds = current_user.follows;
+    let allPost = await Promise.all(
+      myFollowIds.map(async (x) => {
+        return await postCollection.findOne({ _id: ObjectId(x) });
       })
     );
 
@@ -153,23 +153,23 @@ const exportedMethods = {
     return allPost;
   },
 
-    //(done)
-    async getAllPosts() {
-      const postCollection = await posts();
-      const allPost = await postCollection.find({}).toArray();
-      if (!allPost) throw 'Posts not found';
-      ////convert img array to imgbase64head array
-      await Promise.all(allPost.map(async (post) => {
-        const imgArray = post.img;
-        const imgbase64headArray = [];
-        for (let i = 0; i < imgArray.length; i++) {
-          let imgbase64head = await images.getImageById(imgArray[i]);
-          imgbase64headArray.push(imgbase64head);
-        }
-        post.imgbase64headArray = imgbase64headArray;
-      }))
-      return allPost;
-    },
+  //(done)
+  async getAllPosts() {
+    const postCollection = await posts();
+    const allPost = await postCollection.find({}).toArray();
+    if (!allPost) throw 'Posts not found';
+    ////convert img array to imgbase64head array
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (let i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+    return allPost;
+  },
 
   //(done)
   async getPostById(id) {
@@ -276,7 +276,7 @@ const exportedMethods = {
       img: img,
       price: price,
       time: timenow,
-      bought: false
+      sold: false
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
@@ -387,7 +387,40 @@ const exportedMethods = {
       throw 'Update failed';
     }
     await users.removeFollowFromUser(userId, postId);
-  }
+  },
+
+  // sold function
+  async setSold(postId) {
+    try {
+      const postCollection=await posts();
+      let currentPost = await this.getPostById(postId);
+      currentPost.sold = true;
+      const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
+      if (updateInfo.modifiedCount === 0) {
+        console.log('could not sold post');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async backSold(postId) {
+    try {
+      const postCollection=await posts();
+      let currentPost = await this.getPostById(postId);
+      currentPost.sold = false;
+      const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
+      if (updateInfo.modifiedCount === 0) {
+        console.log('could not backsold post');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 
 };
 

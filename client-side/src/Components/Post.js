@@ -54,6 +54,10 @@ const useStyles = makeStyles({
     secondary_title: {
         fontWeight: 'bold',
         color: '#000'
+    },
+    followButton: {
+        float: 'right',
+        marginLeft:'5px'
     }
 });
 
@@ -63,8 +67,12 @@ const Post = (props) => {
     const [notFound, setNotFound] = useState(false);
     const [badRequest, setBadRequest] = useState(false);
     const [followState, setFollowState] = useState(0);//0 seller 1 unfollow 2 follow
+    const [soldState, setSoldState] = useState(undefined);
     const classes = useStyles();
     let followButton = "";
+    let contactButton = "";
+    let soldButton = "";
+    let soldSignal="";
 
     useEffect(() => {
         console.log('useEffect fired item');
@@ -120,10 +128,42 @@ const Post = (props) => {
             }
         }
         if (postData) {
-            console.log('x');
             changeFollowState(cookie.load('current_id'), postData._id);
         }
     }, [followState]);
+
+    useEffect(() => {
+        async function changeSoldState(postId) {
+            if (soldState) {
+                await axios.get(`http://localhost:3008/posts/soldPost/${postId}`);
+                //followButton = <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={setFollowState(2)}>Cancel Follow</Button>
+            } else if (!soldState) {
+                await axios.get(`http://localhost:3008/posts/backSoldPost/${postId}`);
+                //followButton = <Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={setFollowState(1)}>Follow</Button>
+            }
+            try {
+                let id = props.match.params.id;
+                // let reg = /^[0-9]*[0-9][0-9]*$/;
+                //!reg.test(id)
+                if (false) {
+                    setBadRequest(true);
+                    setLoading(false);
+                } else {
+                    let { data } = await axios.get(`http://localhost:3008/posts/${id}`);
+                    setPostData(data);
+                    setLoading(false);
+                }
+
+            } catch (e) {
+                setNotFound(true);
+                setLoading(false);
+                console.log(e);
+            }
+        }
+        if (postData) {
+            changeSoldState(postData._id);
+        }
+    }, [soldState]);
 
     function generateTag(tag) {
         return (
@@ -141,6 +181,7 @@ const Post = (props) => {
     }
 
     function isFollowed(userId, current_post) {
+        if (!current_post.followers) return false;
         let followers = current_post.followers;
         for (let i = 0; i < followers.length; i++) {
             if (userId == followers[i]) return true;
@@ -148,37 +189,46 @@ const Post = (props) => {
         return false;
     }
 
-    // async function follow(userId,posrtId){
-    //     await axios.get(`http://localhost:3008/follow/${userId}/${posrtId}`);
-    //     console.log('f')
-
-    //     followButton= <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={unfollow(cookie.load('current_id'),postData._id)}>Cancel Follow</Button>
-    // }
-
-    // async function unfollow(userId,posrtId){
-    //     await axios.get(`http://localhost:3008/unFollow/${userId}/${posrtId}`);
-    //     followButton=<Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={follow(cookie.load('current_id'),postData._id)}>Follow</Button>
-    // }
-
-    //unfollow(cookie.load('current_id'),postData._id)
-    //follow(cookie.load('current_id'),postData._id)
-
     function generateFollow(userId, current_post) {
         if (isSeller(userId, current_post)) {
+            contactButton = <Button variant="contained" color='primary' hidden>contact yourself</Button>;
             return (
-                <Button variant="contained" disabled color="secondery">You are the seller</Button>
+                <Button className={classes.followButton} variant="contained" disabled color="secondary">You are the seller</Button>
             );
         }
         else if (isFollowed(userId, current_post)) {
+            contactButton = <Button variant="contained" color='primary'>Contact with him/her</Button>;
             return (
-                <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={() => { setFollowState(2) }}>Cancel Follow</Button>
+                <Button className={classes.followButton} variant="contained" color="primary" startIcon={<StarIcon />} onClick={() => { setFollowState(2) }}>Cancel Follow</Button>
             );
-        } else return (
-            <Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={() => { setFollowState(1) }}>Follow</Button>
-        );
+        } else {
+            contactButton = <Button variant="contained" color='primary'>Contact with him/her</Button>;
+            return (
+                <Button className={classes.followButton} variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={() => { setFollowState(1) }}>Follow</Button>
+            );
+        }
     }
 
-    if (postData && postData.userWhoPost && postData.followers) {
+    function generateSold(uesrId, postData) {
+        if (isSeller(uesrId,postData)) {
+            if (postData.sold) {
+                soldSignal=(<Button className={classes.followButton} variant="contained" color='primary' disabled>Sell out</Button>)
+                return (<Button variant="contained" color='primary' onClick={()=>{setSoldState(false)}}>Put it back up</Button>);
+            } else {
+                soldSignal=(<Button className={classes.followButton} variant="contained" color='primary' hidden>Sell out</Button>)
+                return (<Button variant="contained" color='secondary' onClick={()=>{setSoldState(true)}} >Off the shelf</Button>);
+            }
+        } else return (
+            <Button variant="contained" color='primary' hidden>no ownership of post</Button>
+        )
+    }
+
+    if (postData) {
+        //setSoldState(postData.sold);
+        soldButton = generateSold(cookie.load('current_id'), postData);
+    }
+
+    if (postData && postData.userWhoPost) {
         followButton = generateFollow(cookie.load('current_id'), postData);
     }
 
@@ -211,10 +261,10 @@ const Post = (props) => {
                     title="Item image" />
                 <CardContent>
                     <Typography className={classes.secondary_container}>
-                        {tags}{followButton}
+                        {tags}{soldSignal}{followButton}
                     </Typography>
                     <Typography className={classes.secondary_container}>
-                        <label className={classes.secondary_title}>Price:</label>{postData.price}
+                        <label className={classes.secondary_title}>Price: {postData.price}</label>
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="div" className={classes.secondary_container}>
                         <label className={classes.secondary_title}>Description:</label>
@@ -229,7 +279,8 @@ const Post = (props) => {
                     <Typography className={classes.secondary_container}>
                         <label className={classes.secondary_title}>Email:</label>{postData.userWhoPost.email}
                     </Typography>
-                    <Button variant="contained" color='primary'>Contact with him/her</Button>
+                    {contactButton}
+                    {soldButton}
                 </CardContent>
             </Card>
         );
