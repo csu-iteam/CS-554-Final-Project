@@ -58,7 +58,7 @@ const exportedMethods = {
   async getPostsByUser(username) {
     if (!username) throw 'No username provided';
     const postCollection = await posts();
-
+    
     return await postCollection.find({ "userWhoPost.name": username }).toArray();
   },
 
@@ -68,6 +68,32 @@ const exportedMethods = {
     if (!currentEmail) throw 'no user email provide';
     const postCollection = await posts();
     const allPost = await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+
+    return allPost;
+  },
+
+  async getMyFollowByUserEmail(currentEmail) {
+    if (!currentEmail) throw 'no user email provide';
+    const postCollection = await posts();
+    let current_user= await users.getUserByEmail(currentEmail);
+    let myFollowIds=current_user.follows;
+    let allPost=await Promise.all(
+      myFollowIds.map(async (x)=>{
+        return await postCollection.findOne({_id: ObjectId(x)});
+      })
+    );
+
+    //const allPost = await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
     if (!allPost) throw 'Posts not found';
     await Promise.all(allPost.map(async (post) => {
       const imgArray = post.img;

@@ -52,6 +52,16 @@ router.get('/getpostbyuseremail/:currentEmail', async (req, res) => {
   }
 });
 
+router.get('/getmyfollowbyuseremail/:currentEmail',async(req,res)=>{
+  try {
+    const postList = await postData.getMyFollowByUserEmail(req.params.currentEmail);
+
+    res.json(postList);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
 // make a new posts by email of user,
 // "useremail": currentEmail.value,
 // "tag": tag.value,
