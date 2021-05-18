@@ -397,14 +397,30 @@ const exportedMethods = {
       currentPost.sold = true;
       const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
       if (updateInfo.modifiedCount === 0) {
-        console.log('could not update post');
+        console.log('could not sold post');
         return false;
       }
       return true;
     } catch (e) {
       console.log(e);
     }
-  }
+  },
+
+  async backSold(postId) {
+    try {
+      const postCollection=await posts();
+      let currentPost = await this.getPostById(postId);
+      currentPost.sold = false;
+      const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
+      if (updateInfo.modifiedCount === 0) {
+        console.log('could not backsold post');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 
 };
 

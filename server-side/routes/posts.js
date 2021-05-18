@@ -313,4 +313,15 @@ router.get('/soldPost/:postId', async (req, res) => {
     res.status(500).json({ error: e });
   }
 });
+
+router.get('/backSoldPost/:postId',async(req,res)=>{
+  let postId = req.params.postId;
+  console.log('z')
+  try {
+    await postData.backSold(postId);
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
 module.exports = router;
