@@ -1,10 +1,19 @@
 import { ChatEngine } from 'react-chat-engine';
+import React, { useEffect} from 'react';
 // import LoginForm from './LoginForm';
 import ChatFeed from './ChatFeed';
 import './chat.css'
-
+import cookie from 'react-cookies'
 const ChatApp = () => {
     // if (!localStorage.getItem('username')) return <LoginForm />
+    useEffect(() => {
+        let username = cookie.load('current_username');
+        if(!username){
+            window.location.href = "/login";
+        }
+    }, []
+    );
+
     return (
         <ChatEngine
             height='100vh'

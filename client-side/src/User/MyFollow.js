@@ -36,7 +36,7 @@ const useStyles = makeStyles({ //TODO: should be modified
     }
 });
 
-const MyPost = (props) => {
+const MyFollow = (props) => {
 
     const currentEmail = props.match.params.currentEmail;
     
@@ -59,7 +59,7 @@ const MyPost = (props) => {
         console.log('myPost useEffect fired');
         async function fetchData() {
             try {
-                let url = `http://localhost:3008/posts/getpostbyuseremail/${currentEmail}`;
+                let url = `http://localhost:3008/posts/getmyfollowbyuseremail/${currentEmail}`;
                 const { data } = await axios.get(url,
                     { headers: { Accept: 'application/json' } });
                 setPostData(data);
@@ -69,7 +69,7 @@ const MyPost = (props) => {
             }
         }
         fetchData();
-    }, [currentEmail]
+    }, []
     );
 
     
@@ -92,13 +92,13 @@ const MyPost = (props) => {
                                 <Typography className={classes.titleHead} gutterBottom variant='h6' component='h3'>
                                     {post.title}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Price: {post.price}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Seller: {post.userWhoPost.name}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Release Time: {post.time}
                                 </Typography>
                             </CardContent>
@@ -136,4 +136,4 @@ const MyPost = (props) => {
     }
 };
 
-export default MyPost;
+export default MyFollow;
