@@ -6,7 +6,6 @@ const uuid = require('uuid/v4');
 
 var { ObjectId } = require('mongodb');
 
-
 function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
@@ -35,58 +34,10 @@ const exportedMethods = {
 
 
   //(done)
-  async getPostsByTag(tag) {
-    if (!tag) throw 'No tag provided';
-    const postCollection = await posts();
-    const allPost = await postCollection.find({ tag: tag }).toArray();
-    if (!allPost) throw 'Posts not found';
-    await Promise.all(allPost.map(async (post) => {
-      const imgArray = post.img;
-      const imgbase64headArray = [];
-      for (i = 0; i < imgArray.length; i++) {
-        let imgbase64head = await images.getImageById(imgArray[i]);
-        imgbase64headArray.push(imgbase64head);
-      }
-      post.imgbase64headArray = imgbase64headArray;
-    }))
-
-    return allPost;
-
-  },
-
-  //(done)
-  async getPostsByUser(username) {
-    if (!username) throw 'No username provided';
-    const postCollection = await posts();
-
-    return await postCollection.find({ "userWhoPost.name": username }).toArray();
-  },
-
-
-  //(done)
-  async getPostsByUserEmail(currentEmail) {
-    if (!currentEmail) throw 'no user email provide';
-    const postCollection = await posts();
-    const allPost = await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
-    if (!allPost) throw 'Posts not found';
-    await Promise.all(allPost.map(async (post) => {
-      const imgArray = post.img;
-      const imgbase64headArray = [];
-      for (i = 0; i < imgArray.length; i++) {
-        let imgbase64head = await images.getImageById(imgArray[i]);
-        imgbase64headArray.push(imgbase64head);
-      }
-      post.imgbase64headArray = imgbase64headArray;
-    }))
-
-    return allPost;
-  },
-
-
-    //(done)
-    async getAllPosts() {
+  async getAllPosts() {
+    try {
       const postCollection = await posts();
-      const allPost = await postCollection.find({}).toArray();
+      const allPost = await postCollection.find({ sold: false }).toArray();
       if (!allPost) throw 'Posts not found';
       ////convert img array to imgbase64head array
       await Promise.all(allPost.map(async (post) => {
@@ -100,7 +51,125 @@ const exportedMethods = {
       }))
       /////
       return allPost;
-    },
+    } catch (e) {
+      throw 'get all post failed'
+    }
+  },
+
+  //(done)
+  async getPostsByTag(tag) {
+    try {
+      if (!tag) throw 'No tag provided';
+      const postCollection = await posts();
+      const typedPost = await postCollection.find({ tag: tag, sold: false }).toArray();
+      if (!typedPost) throw 'Posts not found';
+      ////convert img array to imgbase64head array
+      await Promise.all(typedPost.map(async (post) => {
+        const imgArray = post.img;
+        const imgbase64headArray = [];
+        for (i = 0; i < imgArray.length; i++) {
+          let imgbase64head = await images.getImageById(imgArray[i]);
+          imgbase64headArray.push(imgbase64head);
+        }
+        post.imgbase64headArray = imgbase64headArray;
+      }))
+      /////
+      return typedPost;
+    } catch (e) {
+      throw 'get post by tag failed'
+    }
+  },
+
+  //(done)
+  async getPostsByUser(username) {
+    if (!username) throw 'No username provided';
+    const postCollection = await posts();
+
+    return await postCollection.find({ "userWhoPost.name": username }).toArray();
+  },
+
+  //(done)
+  async getPostsByUserEmail(currentEmail) {
+    if (!currentEmail) throw 'no user email provide';
+    const postCollection = await posts();
+    const allPost = await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (let i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+
+    return allPost;
+  },
+
+
+  async getPostsBySearchTerm(searchTerm) {
+    if (!searchTerm) throw 'No search term provided';
+    const postCollection = await posts();
+    const query = { title: { $regex: ".*" + searchTerm + ".*" } };
+    const allPost = await postCollection.find(query).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (let i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+    return allPost;
+  },
+  //(done)
+  async getMyFollowByUserEmail(currentEmail) {
+
+    if (!currentEmail) throw 'no user email provide';
+    const postCollection = await posts();
+    let current_user = await users.getUserByEmail(currentEmail);
+    let myFollowIds = current_user.follows;
+    let allPost = await Promise.all(
+      myFollowIds.map(async (x) => {
+        return await postCollection.findOne({ _id: ObjectId(x) });
+      })
+    );
+
+    //const allPost = await postCollection.find({ "userWhoPost.email": currentEmail }).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (let i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+
+    return allPost;
+  },
+
+  //(done)
+  async getAllPosts() {
+    const postCollection = await posts();
+    const allPost = await postCollection.find({}).toArray();
+    if (!allPost) throw 'Posts not found';
+    ////convert img array to imgbase64head array
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (let i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+    return allPost;
+  },
 
   //(done)
   async getPostById(id) {
@@ -111,7 +180,7 @@ const exportedMethods = {
     //////convert img array to imgbase64head array
     const imgArray = post.img;
     const imgbase64headArray = [];
-    for (i = 0; i < imgArray.length; i++) {
+    for (let i = 0; i < imgArray.length; i++) {
       let imgbase64head = await images.getImageById(imgArray[i]);
       imgbase64headArray.push(imgbase64head);
     }
@@ -207,7 +276,7 @@ const exportedMethods = {
       img: img,
       price: price,
       time: timenow,
-      bought: false
+      sold: false
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);
@@ -318,6 +387,23 @@ const exportedMethods = {
       throw 'Update failed';
     }
     await users.removeFollowFromUser(userId, postId);
+  },
+
+  // sold function
+  async setSold(postId) {
+    try {
+      const postCollection=await posts();
+      let currentPost = await this.getPostById(postId);
+      currentPost.sold = true;
+      const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
+      if (updateInfo.modifiedCount === 0) {
+        console.log('could not update post');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
 };

@@ -3,6 +3,12 @@ const router = express.Router();
 const data = require('../data');
 const postData = data.posts;
 const imageData = data.images;
+const bluebird = require('bluebird');
+const redis = require('redis');
+const e = require('express');
+const client = redis.createClient();
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
 
 //Show the single post with id   (done)
 router.get('/:id', async (req, res) => {
@@ -15,15 +21,48 @@ router.get('/:id', async (req, res) => {
 });
 
 //show the list of posts with tag  (done)
+router.get('/tag/:tag', async (req, res, next) => {
+  try {
+    const postList = await client.getAsync(req.params.tag);
+    if (postList) {
+      res.json(JSON.parse(postList));
+      console.log(req.params.tag + ' post data from redis');
+    } else next();
+  } catch (e) {
+    res.status(404).json({ error: 'Post not found' });
+  }
+});
+
 router.get('/tag/:tag', async (req, res) => {
-  const postList = await postData.getPostsByTag(req.params.tag);
-  res.json(postList);
+  try {
+    const postList = await postData.getPostsByTag(req.params.tag);
+    await client.setAsync(req.params.tag, JSON.stringify(postList), 'EX', 5); // set EX in 5 secs, prevent user keeps refreshing page to make pressure to DB, and avoid new post cannot be updated.
+    console.log(req.params.tag + ' post data from DB');
+    res.json(postList);
+  } catch (e) {
+    res.status(404).json({ error: 'Post not found' });
+  }
 });
 
 //show all of the posts  (done)
+router.get('/', async (req, res, next) => {
+  try {
+    const postList = await client.getAsync('all');
+    if (postList) {
+      res.json(JSON.parse(postList));
+      console.log('all post data from redis');
+    }
+    else next();
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
 router.get('/', async (req, res) => {
   try {
     const postList = await postData.getAllPosts();
+    await client.setAsync('all', JSON.stringify(postList), 'EX', 5); // set EX in 5 secs, prevent user keeps refreshing page to make pressure to DB, and avoid new post cannot be updated.
+    console.log('all post data from DB');
     res.json(postList);
   } catch (e) {
     res.status(500).json({ error: e });
@@ -41,10 +80,40 @@ router.get('/getpostbyuser/:username', async (req, res) => {
   }
 });
 
+//show all of the posts by username (done)
+router.get('/getpostbyuser/:username', async (req, res) => {
+  try {
+    const postList = await postData.getPostsByUser(req.params.username);
+
+    res.json(postList);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.get('/search/:searchTerm', async (req, res) => {
+  try {
+    const postList = await postData.getPostsBySearchTerm(req.params.searchTerm);
+    res.json(postList);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+})
+
 //  get post by email  (done)
 router.get('/getpostbyuseremail/:currentEmail', async (req, res) => {
   try {
     const postList = await postData.getPostsByUserEmail(req.params.currentEmail);
+
+    res.json(postList);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.get('/getmyfollowbyuseremail/:currentEmail', async (req, res) => {
+  try {
+    const postList = await postData.getMyFollowByUserEmail(req.params.currentEmail);
 
     res.json(postList);
   } catch (e) {
@@ -229,6 +298,16 @@ router.get('/unFollow/:userId/:postId', async (req, res) => {
   let postId = req.params.postId;
   try {
     await postData.cancelFollow(postId, userId);
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.get('/soldPost/:postId', async (req, res) => {
+  let postId = req.params.postId;
+  try {
+    await postData.setSold(postId);
     res.sendStatus(200);
   } catch (e) {
     res.status(500).json({ error: e });

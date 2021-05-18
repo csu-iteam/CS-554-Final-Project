@@ -64,6 +64,7 @@ const Post = (props) => {
     const [badRequest, setBadRequest] = useState(false);
     const [followState, setFollowState] = useState(0);//0 seller 1 unfollow 2 follow
     const classes = useStyles();
+    let followButton = "";
 
     useEffect(() => {
         console.log('useEffect fired item');
@@ -94,8 +95,28 @@ const Post = (props) => {
         async function changeFollowState(userId, posrtId) {
             if (followState == 1) {
                 await axios.get(`http://localhost:3008/posts/follow/${userId}/${posrtId}`);
+                //followButton = <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={setFollowState(2)}>Cancel Follow</Button>
             } else if (followState == 2) {
                 await axios.get(`http://localhost:3008/posts/unFollow/${userId}/${posrtId}`);
+                //followButton = <Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={setFollowState(1)}>Follow</Button>
+            }
+            try {
+                let id = props.match.params.id;
+                // let reg = /^[0-9]*[0-9][0-9]*$/;
+                //!reg.test(id)
+                if (false) {
+                    setBadRequest(true);
+                    setLoading(false);
+                } else {
+                    let { data } = await axios.get(`http://localhost:3008/posts/${id}`);
+                    setPostData(data);
+                    setLoading(false);
+                }
+
+            } catch (e) {
+                setNotFound(true);
+                setLoading(false);
+                console.log(e);
             }
         }
         if (postData) {
@@ -156,7 +177,7 @@ const Post = (props) => {
             <Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={() => { setFollowState(1) }}>Follow</Button>
         );
     }
-    let followButton = "";
+
     if (postData && postData.userWhoPost && postData.followers) {
         followButton = generateFollow(cookie.load('current_id'), postData);
     }
