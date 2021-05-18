@@ -62,7 +62,7 @@ const MyPost = (props) => {
             }
         }
         fetchData();
-    }, []
+    }, [currentEmail]
     );
 
     

@@ -7,6 +7,7 @@ const uuid = require('uuid/v4');
 var { ObjectId } = require('mongodb');
 
 
+
 function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
@@ -43,7 +44,7 @@ const exportedMethods = {
     await Promise.all(allPost.map(async (post) => {
       const imgArray = post.img;
       const imgbase64headArray = [];
-      for (i = 0; i < imgArray.length; i++) {
+      for (let i = 0; i < imgArray.length; i++) {
         let imgbase64head = await images.getImageById(imgArray[i]);
         imgbase64headArray.push(imgbase64head);
       }
@@ -52,6 +53,24 @@ const exportedMethods = {
 
     return allPost;
 
+  },
+
+  async getPostsBySearchTerm(searchTerm){
+    if (!searchTerm) throw 'No search term provided';
+    const postCollection = await posts();
+    const query = {title: {$regex: ".*" + searchTerm + ".*"}};
+    const allPost= await postCollection.find(query).toArray();
+    if (!allPost) throw 'Posts not found';
+    await Promise.all(allPost.map(async (post) => {
+      const imgArray = post.img;
+      const imgbase64headArray = [];
+      for (let i = 0; i < imgArray.length; i++) {
+        let imgbase64head = await images.getImageById(imgArray[i]);
+        imgbase64headArray.push(imgbase64head);
+      }
+      post.imgbase64headArray = imgbase64headArray;
+    }))
+    return allPost;
   },
 
   //(done)
@@ -72,7 +91,7 @@ const exportedMethods = {
     await Promise.all(allPost.map(async (post) => {
       const imgArray = post.img;
       const imgbase64headArray = [];
-      for (i = 0; i < imgArray.length; i++) {
+      for (let i = 0; i < imgArray.length; i++) {
         let imgbase64head = await images.getImageById(imgArray[i]);
         imgbase64headArray.push(imgbase64head);
       }
@@ -92,7 +111,7 @@ const exportedMethods = {
       await Promise.all(allPost.map(async (post) => {
         const imgArray = post.img;
         const imgbase64headArray = [];
-        for (i = 0; i < imgArray.length; i++) {
+        for (let i = 0; i < imgArray.length; i++) {
           let imgbase64head = await images.getImageById(imgArray[i]);
           imgbase64headArray.push(imgbase64head);
         }
@@ -111,7 +130,7 @@ const exportedMethods = {
     //////convert img array to imgbase64head array
     const imgArray = post.img;
     const imgbase64headArray = [];
-    for (i = 0; i < imgArray.length; i++) {
+    for (let i = 0; i < imgArray.length; i++) {
       let imgbase64head = await images.getImageById(imgArray[i]);
       imgbase64headArray.push(imgbase64head);
     }

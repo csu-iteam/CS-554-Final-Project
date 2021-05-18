@@ -129,7 +129,7 @@ class MakeNewPost extends Component {
                 {/* <MutiTags id="tag" />
                 <MutiTags bgcolor={this.state.bgcolor} changeColor={(color)=>{this.bgChange(color)}} /> */}
                 <div className="center" >
-                    <p>Select Tag:</p>
+                    <p>Select Tag</p>
                     <MultiSelect
                         options={options}
                         value={selected}
@@ -138,30 +138,25 @@ class MakeNewPost extends Component {
                         id="selected"
                     />
                 </div><div id="selectedError" className="error" hidden></div>
-
-
-
-
                 <div hidden>
                     <input type="string" className="form-control" id="currentEmail" defaultValue={currentEmail} name="currentEmail" />{currentEmail}<div></div>
                 </div>
-                {/* <div className="center">
-                    <label htmlFor="example1">tag:</label>
-                    <input type="string" className="form-control" id="tag" defaultValue={tag} name="tag" onChange={this.handleChange} /><div id="tagError" className="error" hidden></div>
-                </div> */}
+                <br />
                 <br />
                 <div className="center">
-                    <label htmlFor="example2">title:</label>
+                    <label htmlFor="example2">Title</label>
                     <input type="string" className="form-control" id="title" defaultValue={title} name="title" onChange={this.handleChange} /><div id="titleError" className="error" hidden></div>
                 </div>
                 <br />
+                <br />
                 <div className="center">
-                    <label htmlFor="example3">discription:</label>
+                    <label htmlFor="example3">Discription</label>
                     <input type="string" className="form-control" id="discription" defaultValue={discription} name="discription" onChange={this.handleChange} /><div id="discriptionError" className="error" hidden></div>
                 </div>
                 <br />
+                <br />
                 <div className="center">
-                    <label htmlFor="example4">price:</label>
+                    <label htmlFor="example4">Price</label>
                     <input type="string" className="form-control" id="price" defaultValue={price} name="price" onChange={this.handleChange} /><div id="priceError" className="error" hidden></div>
                 </div>
                 <br />
@@ -169,10 +164,15 @@ class MakeNewPost extends Component {
                 {/* <p>todo  img</p> */}
                 <div className="center">
                     <label for="post-img" class="postInput">
-                        <button type="submit" id="postImg">Upload IMG</button>
+                        Update Image      
+                        <br />
+                        <br />
+                        <button type="submit" id="postImg" className="btn btn-primary" hidden>Upload IMG</button>
                         <input type="file" id="file_input" multiple />
+                        
                     </label>
                 </div>
+                
 
                 <br />
                 <button type="submit" className="btn btn-primary">Submit</button>
