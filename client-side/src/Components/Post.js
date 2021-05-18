@@ -141,6 +141,7 @@ const Post = (props) => {
     }
 
     function isFollowed(userId, current_post) {
+        if(!current_post.followers) return false;
         let followers = current_post.followers;
         for (let i = 0; i < followers.length; i++) {
             if (userId == followers[i]) return true;
@@ -164,6 +165,7 @@ const Post = (props) => {
     //follow(cookie.load('current_id'),postData._id)
 
     function generateFollow(userId, current_post) {
+        console.log(userId, current_post)
         if (isSeller(userId, current_post)) {
             return (
                 <Button variant="contained" disabled color="secondery">You are the seller</Button>
@@ -178,7 +180,7 @@ const Post = (props) => {
         );
     }
 
-    if (postData && postData.userWhoPost && postData.followers) {
+    if (postData && postData.userWhoPost) {
         followButton = generateFollow(cookie.load('current_id'), postData);
     }
 
