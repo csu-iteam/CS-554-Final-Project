@@ -128,60 +128,56 @@ async function main() {
     '$9999999999999'
   );
 
+  await posts.addPost(
+    user5_Id,
+    ['MoneyChange'],
+    'Need US dollar',
+    'I need to exchange RMB for USD(I need USD), payment method: Alipay and Zelle!',
+    [imgId],
+    'The current exchange rate for 1000USD'
+  );
 
+  await posts.addPost(
+    user5_Id,
+    ['Home,Garden,Tools','Smart Home'],
+    'Selling a queen size bed',
+    'Selling a queen size bed which is 80% new, pick up at Hoboken *******',
+    [imgId],
+    '$100'
+  );
 
+  await posts.addPost(
+    user5_Id,
+    ['Outdoors','Others'],
+    'Selling a branded bicycle!',
+    'This a 90% new road bike which I bought 6 months ago with $800, I just rode it for less than 100 miles and never fell',
+    [imgId],
+    '$580'
+  );
 
-  // await posts.addPost(
+  await posts.addPost(
+    user5_Id,
+    ['Electronics','Computers'],
+    'A high profile desktop PC!',
+    `CPU: Intel i10 10900K
+     GPU: Nvidia RTX 3090
+     Memory: G.SKILL Trident Z Royal 4000 C15 16GB*2
+     MotherBoard: ROG MAXIMUS XII EXTREME (Z490)
+     Contact me if you want more details!
+     `,
+    [imgId],
+    '$4800(not decided yet)'
+  );
 
-  //   jwId,
-  //   ['MoneyChange'],
-  //   'Need US dollar',
-  //   'I need to exchange RMB for USD(I need USD), payment method: Alipay and Zelle!',
-  //   [imgId],
-  //   'The current exchange rate for 1000USD'
-  // );
-
-  // await posts.addPost(
-  //   jwId,
-  //   ['Home,Garden,Tools','Smart Home'],
-  //   'Selling a queen size bed',
-  //   'Selling a queen size bed which is 80% new, pick up at Hoboken *******',
-  //   [imgId],
-  //   '$100'
-  // );
-
-  // await posts.addPost(
-  //   jwId,
-  //   ['Outdoors','Others'],
-  //   'Selling a branded bicycle!',
-  //   'This a 90% new road bike which I bought 6 months ago with $800, I just rode it for less than 100 miles and never fell',
-  //   [imgId],
-  //   '$580'
-  // );
-
-  // await posts.addPost(
-  //   jwId,
-  //   ['Electronics','Computers'],
-  //   'A high profile desktop PC!',
-  //   `CPU: Intel i10 10900K
-  //    GPU: Nvidia RTX 3090
-  //    Memory: G.SKILL Trident Z Royal 4000 C15 16GB*2
-  //    MotherBoard: ROG MAXIMUS XII EXTREME (Z490)
-  //    Contact me if you want more details!
-  //    `,
-  //   [imgId],
-  //   '$4800(not decided yet)'
-  // );
-
-  // await posts.addPost(
-  //   jwId,
-  //   ['Books'],
-  //   'CS554 book',
-  //   `this is a book which can make sure you get A 
-  //    `,
-  //   [imgId],
-  //   '$10000000000'
-  // );
+  await posts.addPost(
+    user5_Id,
+    ['Books'],
+    'CS554 book',
+    `this is a book which can make sure you get A 
+     `,
+    [imgId],
+    '$10000000000'
+  );
 
   console.log('Done seeding database');
 
