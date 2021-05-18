@@ -30,7 +30,7 @@ let exportedMethods = {
     const bcrypt_password = await bcrypt.hash(password, saltRounds);
     posts = [];
     const newChatUserCreated = await this.addChatUser({ username: username, email: email, password: bcrypt_password});
-    if (!newChatUserCreated?.id) throw 'Fail to create chat user';
+    if (!newChatUserCreated.id) throw 'Fail to create chat user';
     let newUser = {
       username: username,
       email: email,
@@ -85,33 +85,38 @@ let exportedMethods = {
 
   async removeUser(id) {
     const userCollection = await users();
+    const user = await this.getUserById(id);
+    const chatUserId = user.chatUserId;
     const deletionInfo = await userCollection.removeOne({ _id: id });
+    const deleteChatUserInfo = await this.deleteChatUser(chatUserId);
     if (deletionInfo.deletedCount === 0) {
       throw `Could not delete user with id of ${id}`;
     }
+    if (!deleteChatUserInfo.id) throw 'Fail to update chat user';
     return true;
   },
 
   //done
   async updateUser(id, updatedUser) {
     const user = await this.getUserById(id);
-    
+    const chatUserId = user.chatUserId;
     let userUpdateInfo = {
       username: updatedUser.username,
       email: updatedUser.email,
       password: updatedUser.password
     };
-
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
       { _id: id },
       { $set: userUpdateInfo }
     );
+    const updateChatUserInfo = await this.updateChatUser(chatUserId, userUpdateInfo);
+    if (!updateChatUserInfo.id) throw 'Fail to update chat user';
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
       throw 'Update failed';
-
     return await this.getUserById(id);
   },
+
   //  add post for user  (done) 
   async addPostToUser(userId, postId) {
 
@@ -193,15 +198,15 @@ let exportedMethods = {
     }
   },
 
-  async updateChatUser({ username, email, password }) {
+  async updateChatUser({ chatUserId, userUpdateInfo}) {
     const data = {
-      "username": username,
-      "secret": password,
-      "email": email,
+      "username": userUpdateInfo.username,
+      "secret": userUpdateInfo.password,
+      "email": userUpdateInfo.email,
     };
     const config = {
-      method: 'post',
-      url: 'https://api.chatengine.io/users/',
+      method: 'patch',
+      url: `https://api.chatengine.io/users/${chatUserId}/`,
       headers: {
         'PRIVATE-KEY': privateKey
       },
@@ -214,6 +219,23 @@ let exportedMethods = {
       console.error(e);
     }
   },
+
+  async deleteChatUser(chatUserId) {
+    const config = {
+      method: 'delete',
+      url: `https://api.chatengine.io/users/${chatUserId}/`,
+      headers: {
+        'PRIVATE-KEY': privateKey
+      }
+    };
+
+    try {
+      return await axios(config);
+    } catch (e) {
+      console.error(e);
+    }
+  },
 }
+
 
 module.exports = exportedMethods;
