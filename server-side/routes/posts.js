@@ -91,6 +91,15 @@ router.get('/getpostbyuser/:username', async (req, res) => {
   }
 });
 
+router.get('/search/:searchTerm', async (req, res) =>{
+  try{
+    const postList = await postData.getPostsBySearchTerm(req.params.searchTerm);
+    res.json(postList);
+  }catch(e){
+    res.status(500).json({ error: e });
+  }
+})
+
 //  get post by email  (done)
 router.get('/getpostbyuseremail/:currentEmail', async (req, res) => {
   try {

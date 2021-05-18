@@ -4,6 +4,7 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeSty
 import axios from 'axios';
 import noImage from '../img/no_image.jpg';
 import '../App.css';
+import Search from './Search';
 
 const useStyles = makeStyles({ //TODO: should be modified
     card: {
@@ -42,6 +43,8 @@ const Home = () => {
     const [postData, setPostData] = useState([]);
     const [typedData, setTypedData] = useState([]);
     const [type, setType] = useState('all');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchData, setSearchData] = useState(undefined);
     let card = null;
     let error = null;
 
@@ -78,14 +81,42 @@ const Home = () => {
     }, [type]
     );
 
+    ///////////////////////
+    useEffect(() => {
+        console.log('search useEffect fired');
+        async function fetchData() {
+          try {
+            console.log(`in fetch searchTerm: ${searchTerm}`);
+            const { data } = await axios.get(
+              `http://localhost:3008/posts/search/${searchTerm}`
+            );
+            
+            setSearchData(data);
+            setLoading(false);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+        if (searchTerm) {
+          console.log('searchTerm is set');
+          fetchData();
+        }
+      }, [searchTerm]);
+      ///////////////////////////////////
+
     const handleChange = (e) => {
         setType(e.target.value);
     }
 
+    const searchValue = async (value) => {
+        setSearchTerm(value);
+      };
+
     const typeSelector = (
         <div>
-            <form>
-                <label>Choose trade type：</label>
+            <form className='center'>
+                
+                <label>Tag Search：</label>
                 <select className='selectpicker' onChange={handleChange}>
                     <option value="all">all</option>
                     <option value="Electronics">Electronics</option>
@@ -138,7 +169,13 @@ const Home = () => {
         );
     };
 
-    if (type !== 'all') {
+    if (searchTerm) {  // search term
+        card =
+          searchData &&
+          searchData.map((show) => {
+            return bulidCard(show);
+          });
+    } else if (type !== 'all') {   //search tag
         if (typedData.length > 0) {
             card =
                 typedData &&
@@ -152,7 +189,7 @@ const Home = () => {
                 </div>
             )
         }
-    } else {
+    } else {         // all post
         card =
             postData &&
             postData.map((post) => {
@@ -169,7 +206,12 @@ const Home = () => {
     } else {
         return (
             <div>
+                
+                <Search searchValue={searchValue} />
                 {typeSelector}
+                
+                <p className='center'>HINT: If use Term Search, make sure select "all" in tag; </p>
+                <p>If use Tag search, make sure term search is empty!</p>
                 <br />
                 {error}
                 <Grid container className={classes.grid} spacing={5}>
