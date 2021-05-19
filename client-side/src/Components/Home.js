@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeStyles } from '@material-ui/core';
+import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeStyles, InputLabel, FormControl, MenuItem, Select } from '@material-ui/core';
 import axios from 'axios';
 import noImage from '../img/no_image.jpg';
 import '../App.css';
 import Search from './Search';
 
-const useStyles = makeStyles({ //TODO: should be modified
+const useStyles = makeStyles({
     card: {
         maxWidth: 550,
         height: 'auto',
@@ -28,6 +28,12 @@ const useStyles = makeStyles({ //TODO: should be modified
         height: '100%',
         width: '100%'
     },
+    formControl: {
+        minWidth: 240
+    },
+    inputLabel: {
+        fontSize: '20px',
+    },
     button: {
         color: '#1e8678',
         fontWeight: 'bold',
@@ -37,7 +43,6 @@ const useStyles = makeStyles({ //TODO: should be modified
 
 const Home = () => {
 
-    const regex = /(<([^>]+)>)/gi;
     const classes = useStyles();
     const [loading, setLoading] = useState(true);
     const [postData, setPostData] = useState([]);
@@ -85,24 +90,23 @@ const Home = () => {
     useEffect(() => {
         console.log('search useEffect fired');
         async function fetchData() {
-          try {
-            console.log(`in fetch searchTerm: ${searchTerm}`);
-            const { data } = await axios.get(
-              `http://localhost:3008/posts/search/${searchTerm}`
-            );
-            
-            setSearchData(data);
-            setLoading(false);
-          } catch (e) {
-            console.log(e);
-          }
+            try {
+                console.log(`in fetch searchTerm: ${searchTerm}`);
+                const { data } = await axios.get(
+                    `http://localhost:3008/posts/search/${searchTerm}`
+                );
+                setSearchData(data);
+                setLoading(false);
+            } catch (e) {
+                console.log(e);
+            }
         }
         if (searchTerm) {
-          console.log('searchTerm is set');
-          fetchData();
+            console.log('searchTerm is set');
+            fetchData();
         }
-      }, [searchTerm]);
-      ///////////////////////////////////
+    }, [searchTerm]);
+    ///////////////////////////////////
 
     const handleChange = (e) => {
         setType(e.target.value);
@@ -110,28 +114,31 @@ const Home = () => {
 
     const searchValue = async (value) => {
         setSearchTerm(value);
-      };
+    };
 
     const typeSelector = (
         <div>
-            <form className='center'>
-                
-                <label>Tag Search：</label>
-                <select className='selectpicker' onChange={handleChange}>
-                    <option value="all">all</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Computers">Computers</option>
-                    <option value="Smart Home">Smart Home</option>
-                    <option value="Home,Garden,Tools">Home,Garden,Tools</option>
-                    <option value="Pet Supplies">Pet Supplies</option>
-                    <option value="Handmade">Handmade</option>
-                    <option value="Books">Books</option>
-                    <option value="Outdoors">Outdoors</option>
-                    <option value="MoneyChange">MoneyChange</option>
-                    <option value="Others">Others</option>
-                    
-                </select>
-            </form>
+            <FormControl className={classes.formControl}>
+                <InputLabel id="demo-controlled-open-select-label" className={classes.inputLabel}>Tag Search</InputLabel>
+                <Select
+                    labelId="demo-controlled-open-select-label"
+                    id="demo-controlled-open-select"
+                    onChange={handleChange}
+                    value={type}
+                >
+                    <MenuItem value={"all"}>All</MenuItem>
+                    <MenuItem value={"Electronics"}>Electronics</MenuItem>
+                    <MenuItem value={"Computers"}>Computers</MenuItem>
+                    <MenuItem value={"Smart Home"}>Smart Home</MenuItem>
+                    <MenuItem value={"Home,Garden,Tools"}>Home,Garden,Tools</MenuItem>
+                    <MenuItem value={"Pet Supplies"}>Pet Supplies</MenuItem>
+                    <MenuItem value={"Handmade"}>Handmade</MenuItem>
+                    <MenuItem value={"Books"}>Books</MenuItem>
+                    <MenuItem value={"Outdoors"}>Outdoors</MenuItem>
+                    <MenuItem value={"MoneyChange"}>MoneyChange</MenuItem>
+                    <MenuItem value={"Others"}>Others</MenuItem>
+                </Select>
+            </FormControl>
         </div>
     );
 
@@ -171,10 +178,10 @@ const Home = () => {
 
     if (searchTerm) {  // search term
         card =
-          searchData &&
-          searchData.map((show) => {
-            return bulidCard(show);
-          });
+            searchData &&
+            searchData.map((show) => {
+                return bulidCard(show);
+            });
     } else if (type !== 'all') {   //search tag
         if (typedData.length > 0) {
             card =
@@ -206,10 +213,10 @@ const Home = () => {
     } else {
         return (
             <div>
-                
                 <Search searchValue={searchValue} />
+                <br />
                 {typeSelector}
-                
+
                 <p className='center'>HINT: If use Term Search, make sure select "all" in tag; </p>
                 <p>If use Tag search, make sure term search is empty!</p>
                 <br />
