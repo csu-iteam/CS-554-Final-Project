@@ -1,5 +1,6 @@
 const dbConnection = require('../config/mongoConnection');
 const data = require('../data/');
+const { getUserByEmail } = require('../data/users');
 const users = data.users;
 const posts = data.posts;
 const imageConvert = require('./imageConvert');
@@ -26,8 +27,14 @@ const post = {
 
 async function main() {
   const db = await dbConnection();
-  await db.dropDatabase();
+  
+  let chatUser1 = await users.getUserByEmail('1@stevens.edu'); await chatUser1 && users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser2 = await users.getUserByEmail('2@stevens.edu'); await chatUser2 && users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser3 = await users.getUserByEmail('3@stevens.edu'); await chatUser3 && users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser4 = await users.getUserByEmail('4@stevens.edu'); await chatUser4 && users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser5 = await users.getUserByEmail('5@stevens.edu'); await chatUser5 && users.deleteChatUser(chatUser1.chatUserId);
 
+  await db.dropDatabase();
 
   let user1 = await users.addUser('Jingwei', '1@stevens.edu', '12345678');
   let user2 = await users.addUser('Jiaming', '2@stevens.edu', '12345678');

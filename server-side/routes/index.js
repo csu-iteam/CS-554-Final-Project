@@ -1,5 +1,6 @@
 const postRoutes = require('./posts');
 const userRoutes = require('./users');
+const chatRoutes = require('./chat');
 
 const constructorMethod = (app) => {
   app.use('/posts', postRoutes);

@@ -1,15 +1,18 @@
 import { ChatEngine, getOrCreateChat } from 'react-chat-engine';
 import React, { useEffect, useState} from 'react';
-// import LoginForm from './LoginForm';
 import ChatFeed from './ChatFeed';
 import cookie from 'react-cookies'
+import axios from 'axios';
 
 import './chat.css'
 
 const ChatApp = (props) => {
-    const current_password = cookie.load('current_username');
+    const current_username = cookie.load('current_username');
     const current_password = cookie.load('current_password');
+    const authObject = {projectID: 'f11aa7c6-092f-4478-8982-5bdf7400c712' ,userName: current_username,userSecret: current_password}
+
     const [userToChat, setuserToChat] = useState('');
+
     useEffect(() => {
         let username = cookie.load('current_username');
         if(!username){
@@ -45,8 +48,8 @@ const ChatApp = (props) => {
         <ChatEngine
             height='100vh'
             projectID='f11aa7c6-092f-4478-8982-5bdf7400c712'
-            userName={cookie.load('current_username')}
-            userSecret={cookie.load('current_password')}
+            userName={current_username}
+            userSecret={current_password}
             renderChatFeed={(chatAppProps) => <ChatFeed {...chatAppProps} />}
         />
     )

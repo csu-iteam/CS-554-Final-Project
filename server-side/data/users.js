@@ -232,20 +232,7 @@ let exportedMethods = {
         'PRIVATE-KEY': privateKey
       }
     };
-
-    return await axios(config).then(res => {
-       return res.data;
-      })
-      .catch(err => {
-        console.log(err);
-        return false
-      });
   },
-
-  //tobedone
-  async deleteAllDbUsers() {
-
-  }
 }
 
 
