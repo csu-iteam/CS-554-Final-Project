@@ -17,6 +17,16 @@ router.get('/user', async (req, res) => {
   }
 });
 
+router.get('/user/:email', async (req, res) => {
+  const email = req.params.email;
+  try {
+    let user = await userData.getUserByEmail(email);
+    res.json(user);
+  } catch (e) {
+    res.status(404).json({ error: 'User not found' });
+  }
+});
+
 router.get('/', async (req, res) => {
   try {
     let userList = await userData.getAllUsers();
