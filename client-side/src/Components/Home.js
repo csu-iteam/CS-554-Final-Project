@@ -137,7 +137,7 @@ const Home = () => {
 
     const bulidCard = (post) => {
         return (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={post._id}>
+            <Grid item xs={10} sm={8} md={4} lg={3} xl={2} key={post._id}>
                 <Card className={classes.card} variant='outlined'>
                     <CardActionArea>
                         <Link to={`/post/${post._id}`}>
