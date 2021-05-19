@@ -9,6 +9,10 @@
 	width: 30%;
 }
 
+.hint {
+	font-size: 13px;
+}
+
 .App-logo {
 	height: 80px;
 }
@@ -143,6 +147,6 @@ dd {
 	font-weight: bold;
 }
 
-.home-btn{
+.home-btn {
 	float: left;
 }
