@@ -111,7 +111,7 @@ const exportedMethods = {
   async getPostsBySearchTerm(searchTerm) {
     if (!searchTerm) throw 'No search term provided';
     const postCollection = await posts();
-    const query = { title: { $regex: ".*" + searchTerm + ".*" } };
+    const query = { title: { $regex: ".*" + searchTerm + ".*" }, sold: false };
     const allPost = await postCollection.find(query).toArray();
     if (!allPost) throw 'Posts not found';
     await Promise.all(allPost.map(async (post) => {
@@ -153,23 +153,23 @@ const exportedMethods = {
     return allPost;
   },
 
-  //(done)
-  async getAllPosts() {
-    const postCollection = await posts();
-    const allPost = await postCollection.find({}).toArray();
-    if (!allPost) throw 'Posts not found';
-    ////convert img array to imgbase64head array
-    await Promise.all(allPost.map(async (post) => {
-      const imgArray = post.img;
-      const imgbase64headArray = [];
-      for (let i = 0; i < imgArray.length; i++) {
-        let imgbase64head = await images.getImageById(imgArray[i]);
-        imgbase64headArray.push(imgbase64head);
-      }
-      post.imgbase64headArray = imgbase64headArray;
-    }))
-    return allPost;
-  },
+  // //(done)
+  // async getAllPosts() {
+  //   const postCollection = await posts();
+  //   const allPost = await postCollection.find({}).toArray();
+  //   if (!allPost) throw 'Posts not found';
+  //   ////convert img array to imgbase64head array
+  //   await Promise.all(allPost.map(async (post) => {
+  //     const imgArray = post.img;
+  //     const imgbase64headArray = [];
+  //     for (let i = 0; i < imgArray.length; i++) {
+  //       let imgbase64head = await images.getImageById(imgArray[i]);
+  //       imgbase64headArray.push(imgbase64head);
+  //     }
+  //     post.imgbase64headArray = imgbase64headArray;
+  //   }))
+  //   return allPost;
+  // },
 
   //(done)
   async getPostById(id) {
@@ -227,7 +227,7 @@ const exportedMethods = {
       img: imageArray,               //.....................todo
       price: price,
       time: timenow,
-      bought: false,
+      sold: false,
       //////follower buyer list 
       followers: []
     }
@@ -392,19 +392,35 @@ const exportedMethods = {
   // sold function
   async setSold(postId) {
     try {
-      const postCollection=await posts();
+      const postCollection = await posts();
       let currentPost = await this.getPostById(postId);
       currentPost.sold = true;
       const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
       if (updateInfo.modifiedCount === 0) {
-        console.log('could not update post');
+        console.log('could not sold post');
         return false;
       }
       return true;
     } catch (e) {
       console.log(e);
     }
-  }
+  },
+
+  async backSold(postId) {
+    try {
+      const postCollection = await posts();
+      let currentPost = await this.getPostById(postId);
+      currentPost.sold = false;
+      const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
+      if (updateInfo.modifiedCount === 0) {
+        console.log('could not backsold post');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 
 };
 

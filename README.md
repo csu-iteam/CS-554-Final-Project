@@ -1,4 +1,4 @@
-# Secondary market(temporary name)
+# Secondary market
 
 ## Introduction
 As we found in the group chat of Stevens students, the demand of second-hand transactions is quite high, especially for international students. When they come to the campus at the first time, many kinds of stuff like kitchenware, furniture and bicycles are needed. However, after their graduation, they might have to discard most of those stuff.  
@@ -13,6 +13,9 @@ To fix the problems we mentioned above, we decide to develop a web platform for 
 ### installation
 This project is separate into client-side and server-side, you need get into both of the folders and do installation:  
 `npm install`
+### start redis
+This web application need redis, make sure you have set up redis on your device, if not:https://redis.io/download
+After redis installed, go into your command line and cd into your redis path, do: `redis-server`; then start another cmd, do: `redis-cli`. 
 ### run
 Like you did for installation, you need run both client-side and server-side with:
 `npm start`,
