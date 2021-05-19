@@ -91,7 +91,7 @@ async function main() {
     '$200'
   );
 
-  imageBase64 = imageConvert.convertImageToBase64('bed.png');
+  imageBase64 = imageConvert.convertImageToBase64('bed1.png');
   imgId = await data.images.insertImage(imageBase64);
   await posts.addPost(
     user2_Id,
@@ -108,10 +108,10 @@ async function main() {
   await posts.addPost(
     user2_Id,
     ['Home,Garden,Tools', 'Smart Home', 'Electronics'],
-    'Amazon alxa',
+    'Robot Vacuum Cleaner',
     'very good condition',
     [imgId],
-    '$20'
+    '$200'
   );
 
   imageBase64 = imageConvert.convertImageToBase64('java.png');
@@ -197,15 +197,15 @@ async function main() {
     '$4800(not decided yet)'
   );
 
-  imageBase64 = imageConvert.convertImageToBase64('java.png');
+  imageBase64 = imageConvert.convertImageToBase64('professor.png');
   imgId = await data.images.insertImage(imageBase64);
   await posts.addPost(
     user5_Id,
-    ['Books'],
-    'CS554 book',
-    `this is a book which can make sure you get A, really!`,
+    ['Others'],
+    'cs554 professor',
+    `Not for sale, just share our cool prof.`,
     [imgId],
-    '$10000000000'
+    'priceless'
   );
 
   console.log('Done seeding database');
