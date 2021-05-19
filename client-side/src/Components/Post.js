@@ -197,12 +197,12 @@ const Post = (props) => {
             );
         }
         else if (isFollowed(userId, current_post)) {
-            contactButton = <Button variant="contained" color='primary'>Contact with him/her</Button>;
+            contactButton = <Link to={"/chat/" + postData.userWhoPost.email}><Button variant="contained" color='primary'>Contact with him/her</Button></Link>
             return (
                 <Button className={classes.followButton} variant="contained" color="primary" startIcon={<StarIcon />} onClick={() => { setFollowState(2) }}>Cancel Follow</Button>
             );
         } else {
-            contactButton = <Button variant="contained" color='primary'>Contact with him/her</Button>;
+            contactButton = <Link to={"/chat/" + postData.userWhoPost.email}><Button variant="contained" color='primary'>Contact with him/her</Button></Link>
             return (
                 <Button className={classes.followButton} variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={() => { setFollowState(1) }}>Follow</Button>
             );
