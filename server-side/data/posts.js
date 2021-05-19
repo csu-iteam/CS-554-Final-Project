@@ -111,7 +111,7 @@ const exportedMethods = {
   async getPostsBySearchTerm(searchTerm) {
     if (!searchTerm) throw 'No search term provided';
     const postCollection = await posts();
-    const query = { title: { $regex: ".*" + searchTerm + ".*" } };
+    const query = { title: { $regex: ".*" + searchTerm + ".*" }, sold: false };
     const allPost = await postCollection.find(query).toArray();
     if (!allPost) throw 'Posts not found';
     await Promise.all(allPost.map(async (post) => {
@@ -227,7 +227,7 @@ const exportedMethods = {
       img: imageArray,               //.....................todo
       price: price,
       time: timenow,
-      bought: false,
+      sold: false,
       //////follower buyer list 
       followers: []
     }
@@ -392,7 +392,7 @@ const exportedMethods = {
   // sold function
   async setSold(postId) {
     try {
-      const postCollection=await posts();
+      const postCollection = await posts();
       let currentPost = await this.getPostById(postId);
       currentPost.sold = true;
       const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
@@ -408,7 +408,7 @@ const exportedMethods = {
 
   async backSold(postId) {
     try {
-      const postCollection=await posts();
+      const postCollection = await posts();
       let currentPost = await this.getPostById(postId);
       currentPost.sold = false;
       const updateInfo = await postCollection.updateOne({ _id: ObjectId(postId) }, { $set: currentPost });
