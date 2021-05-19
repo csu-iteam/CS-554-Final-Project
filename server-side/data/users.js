@@ -191,11 +191,13 @@ let exportedMethods = {
       data: data
     };
 
-    try {
-      return await axios(config);
-    } catch (e) {
-      console.error(e);
-    }
+    return await axios(config).then(res => {
+      	return res.data;
+      })
+      .catch(err => {
+        console.log(err);
+        return false
+      });
   },
 
   async updateChatUser({ chatUserId, userUpdateInfo}) {
@@ -213,11 +215,13 @@ let exportedMethods = {
       data: data
     };
 
-    try {
-      return await axios(config);
-    } catch (e) {
-      console.error(e);
-    }
+    return await axios(config).then(res => {
+       return res.data;
+      })
+      .catch(err => {
+        console.log(err);
+        return false
+      });
   },
 
   async deleteChatUser(chatUserId) {
@@ -229,12 +233,19 @@ let exportedMethods = {
       }
     };
 
-    try {
-      return await axios(config);
-    } catch (e) {
-      console.error(e);
-    }
+    return await axios(config).then(res => {
+       return res.data;
+      })
+      .catch(err => {
+        console.log(err);
+        return false
+      });
   },
+
+  //tobedone
+  async deleteAllDbUsers() {
+
+  }
 }
 
 
