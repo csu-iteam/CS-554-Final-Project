@@ -27,12 +27,11 @@ const post = {
 
 async function main() {
   const db = await dbConnection();
-  
-  let chatUser1 = await users.getUserByEmail('1@stevens.edu'); await chatUser1 && users.deleteChatUser(chatUser1.chatUserId);
-  let chatUser2 = await users.getUserByEmail('2@stevens.edu'); await chatUser2 && users.deleteChatUser(chatUser1.chatUserId);
-  let chatUser3 = await users.getUserByEmail('3@stevens.edu'); await chatUser3 && users.deleteChatUser(chatUser1.chatUserId);
-  let chatUser4 = await users.getUserByEmail('4@stevens.edu'); await chatUser4 && users.deleteChatUser(chatUser1.chatUserId);
-  let chatUser5 = await users.getUserByEmail('5@stevens.edu'); await chatUser5 && users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser1 = await users.getUserByEmail('1@stevens.edu'); if (chatUser1) await users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser2 = await users.getUserByEmail('2@stevens.edu'); if (chatUser2) await users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser3 = await users.getUserByEmail('3@stevens.edu'); if (chatUser3) await users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser4 = await users.getUserByEmail('4@stevens.edu'); if (chatUser4) await users.deleteChatUser(chatUser1.chatUserId);
+  let chatUser5 = await users.getUserByEmail('5@stevens.edu'); if (chatUser5) await users.deleteChatUser(chatUser1.chatUserId);
 
   await db.dropDatabase();
 

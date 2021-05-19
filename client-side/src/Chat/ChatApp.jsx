@@ -22,10 +22,11 @@ const ChatApp = (props) => {
     );
 
     function createDirectChat(authObject) {
+        let username = cookie.load('current_username');
         getOrCreateChat(
             authObject,
             { is_direct_chat: true, usernames: [userToChat, username] },
-            () => setUserToChat('')
+            () => console.log("create chat")
         )
     }
 

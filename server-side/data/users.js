@@ -54,7 +54,7 @@ let exportedMethods = {
     const userCollection = await users();
     const user = await userCollection.findOne({ email: useremail });
     if (user === null) {
-      throw "The user is not exist.";
+      console.log("The user is not exist.");
     }
     return user;
   },
