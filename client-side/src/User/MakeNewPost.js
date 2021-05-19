@@ -52,6 +52,8 @@ class MakeNewPost extends Component {
         let price = document.getElementById('price');
         let priceError = document.getElementById('priceError');
         let currentEmail = document.getElementById('currentEmail');
+        let imgError = document.getElementById('imgError');
+
         e.preventDefault();
         if (selected.length <= 0) {
             selectedError.hidden = false;
@@ -81,7 +83,21 @@ class MakeNewPost extends Component {
             priceError.hidden = true;
         }
 
-        if (selectedError.hidden === true && titleError.hidden === true && discriptionError.hidden === true && priceError.hidden === true) {
+        try{
+            let tempFile = e.target[6].files[0];
+            if(!tempFile){
+                imgError.hidden = false;
+                imgError.innerHTML = 'Please update valid img.';
+            }else{
+                imgError.hidden = true;
+            }
+        }catch(e){
+            imgError.hidden = false;
+            imgError.innerHTML = 'Please update valid img.';
+        }
+        
+
+        if (selectedError.hidden === true && titleError.hidden === true && discriptionError.hidden === true && priceError.hidden === true && imgError.hidden === true) {
 
 
             ////////////////////
@@ -142,7 +158,7 @@ class MakeNewPost extends Component {
                         labelledBy="Select"
                         id="selected"
                     />
-                </div><div id="selectedError" className="error" hidden></div>
+                </div><div id="selectedError" className="nothing-in-this-type" hidden></div>
                 <div hidden>
                     <input type="string" className="form-control" id="currentEmail" defaultValue={currentEmail} name="currentEmail" />{currentEmail}<div></div>
                 </div>
@@ -150,19 +166,19 @@ class MakeNewPost extends Component {
                 <br />
                 <div className="center">
                     <label htmlFor="example2">Title</label>
-                    <input type="string" className="form-control" id="title" defaultValue={title} name="title" onChange={this.handleChange} /><div id="titleError" className="error" hidden></div>
+                    <input type="string" className="form-control" id="title" defaultValue={title} name="title" onChange={this.handleChange} /><div id="titleError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <br />
                 <div className="center">
                     <label htmlFor="example3">Discription</label>
-                    <input type="string" className="form-control" id="discription" defaultValue={discription} name="discription" onChange={this.handleChange} /><div id="discriptionError" className="error" hidden></div>
+                    <input type="string" className="form-control" id="discription" defaultValue={discription} name="discription" onChange={this.handleChange} /><div id="discriptionError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <br />
                 <div className="center">
                     <label htmlFor="example4">Price</label>
-                    <input type="string" className="form-control" id="price" defaultValue={price} name="price" onChange={this.handleChange} /><div id="priceError" className="error" hidden></div>
+                    <input type="string" className="form-control" id="price" defaultValue={price} name="price" onChange={this.handleChange} /><div id="priceError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <br />
@@ -174,7 +190,7 @@ class MakeNewPost extends Component {
                         <br />
                         <button type="submit" id="postImg" className="btn btn-primary" hidden>Upload IMG</button>
                         <input type="file" id="file_input" multiple />
-                        
+                        <div id="imgError" className="nothing-in-this-type" hidden></div>
                     </label>
                 </div>
                 
