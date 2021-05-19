@@ -7,7 +7,8 @@ import cookie from 'react-cookies'
 import './chat.css'
 
 const ChatApp = (props) => {
-
+    const current_password = cookie.load('current_username');
+    const current_password = cookie.load('current_password');
     const [userToChat, setuserToChat] = useState('');
     useEffect(() => {
         let username = cookie.load('current_username');
@@ -16,8 +17,6 @@ const ChatApp = (props) => {
         }
     }, []
     );
-
-    const authObject = { 'Project-ID': 'f11aa7c6-092f-4478-8982-5bdf7400c712', 'User-Name': cookie.load('current_username'), 'User-Secret': cookie.load('current_password') }
 
     function createDirectChat(authObject) {
         getOrCreateChat(
