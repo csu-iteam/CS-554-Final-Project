@@ -92,7 +92,7 @@ class Profile extends Component {
                 <br />
                 <div className="center">
                     <label htmlFor="exampleInputEmail1">Email address</label>
-                    <input readonly="readonly" type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} />
+                    <input readOnly="readonly" type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} />
                 </div>
                 <br />
                 <div className="center">
