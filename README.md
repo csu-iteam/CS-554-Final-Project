@@ -11,14 +11,14 @@ To fix the problems we mentioned above, we decide to develop a web platform for 
 
 ## Getting started
 ### MongoDB
-This project require mongoDB, which you can download from: https://www.mongodb.com/try/download
-### installation
+This project requires mongoDB, which you can download from: https://www.mongodb.com/try/download
+### Installation
 This project is separate into client-side and server-side, you need `cd` into both of the folders and do installation:  
 `npm install`
-### start redis
+### Start redis
 This web application need redis, make sure you have set up redis on your device, if not: https://redis.io/download
 After redis installed, go into your command line and `cd` into your redis path, do: `redis-server`; then start another cmd, do: `redis-cli`. 
-### run
+### Run
 Like you did for installation, you need run both client-side and server-side with:
 `npm start`,
 The client-side will be on http://localhost:3000, the server-side will be on http://localhost:3008.
