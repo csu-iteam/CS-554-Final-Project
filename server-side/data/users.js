@@ -2,9 +2,11 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const uuid = require('uuid/v4');
 const ObjectId = require('mongodb').ObjectID;
+const axios = require('axios');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto-js');
 const saltRounds = 10;
+const privateKey = "bb7a9a43-0fdf-45e0-808c-0a3904dba224";
 
 let exportedMethods = {
   async getAllUsers() {
@@ -27,17 +29,20 @@ let exportedMethods = {
     const userCollection = await users();
     const bcrypt_password = await bcrypt.hash(password, saltRounds);
     posts = [];
+    const newChatUserCreated = await this.addChatUser({ username: username, email: email, password: bcrypt_password});
+    if (!newChatUserCreated.id) throw 'Fail to create chat user';
     let newUser = {
       username: username,
       email: email,
       password: bcrypt_password,
       _id: uuid(),
       posts: posts,
+      chatUserId: newChatUserCreated.id,
       follows: []
     };
-
     const newInsertInformation = await userCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
+    
     return await this.getUserById(newInsertInformation.insertedId);
   },
 
@@ -80,33 +85,38 @@ let exportedMethods = {
 
   async removeUser(id) {
     const userCollection = await users();
+    const user = await this.getUserById(id);
+    const chatUserId = user.chatUserId;
     const deletionInfo = await userCollection.removeOne({ _id: id });
+    const deleteChatUserInfo = await this.deleteChatUser(chatUserId);
     if (deletionInfo.deletedCount === 0) {
       throw `Could not delete user with id of ${id}`;
     }
+    if (!deleteChatUserInfo.id) throw 'Fail to update chat user';
     return true;
   },
 
   //done
   async updateUser(id, updatedUser) {
     const user = await this.getUserById(id);
-
+    const chatUserId = user.chatUserId;
     let userUpdateInfo = {
       username: updatedUser.username,
       email: updatedUser.email,
       password: updatedUser.password
     };
-
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
       { _id: id },
       { $set: userUpdateInfo }
     );
+    const updateChatUserInfo = await this.updateChatUser(chatUserId, userUpdateInfo);
+    if (!updateChatUserInfo.id) throw 'Fail to update chat user';
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
       throw 'Update failed';
-
     return await this.getUserById(id);
   },
+
   //  add post for user  (done) 
   async addPostToUser(userId, postId) {
 
@@ -164,7 +174,68 @@ let exportedMethods = {
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
       throw 'Update failed';
     }
-  }
+  },
+
+  async addChatUser({username, email, password}) {
+    const data = {
+      "username": username,
+      "secret": password,
+      "email": email,
+    };
+    const config = {
+      method: 'post',
+      url: 'https://api.chatengine.io/users/',
+      headers: {
+        'PRIVATE-KEY': privateKey
+      },
+      data: data
+    };
+
+    try {
+      return await axios(config);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async updateChatUser({ chatUserId, userUpdateInfo}) {
+    const data = {
+      "username": userUpdateInfo.username,
+      "secret": userUpdateInfo.password,
+      "email": userUpdateInfo.email,
+    };
+    const config = {
+      method: 'patch',
+      url: `https://api.chatengine.io/users/${chatUserId}/`,
+      headers: {
+        'PRIVATE-KEY': privateKey
+      },
+      data: data
+    };
+
+    try {
+      return await axios(config);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async deleteChatUser(chatUserId) {
+    const config = {
+      method: 'delete',
+      url: `https://api.chatengine.io/users/${chatUserId}/`,
+      headers: {
+        'PRIVATE-KEY': privateKey
+      }
+    };
+
+    try {
+      return await axios(config);
+    } catch (e) {
+      console.error(e);
+    }
+  },
 }
+
 
 module.exports = exportedMethods;

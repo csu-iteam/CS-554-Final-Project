@@ -73,6 +73,7 @@ function App() {
             <Link className="showlink" to={`/mypost/${currentEmail}`}> My Posts </Link>
             <Link className="showlink" to={`/myfollow/${currentEmail}`}> My Follows </Link>
             <Link className="showlink" to="/chat">Chat</Link></div>
+
             : <div style={{ float: 'right' }}><Link className="showlink" to="/login" onClick={() => {
               console.log('log in');
             }}>
@@ -93,6 +94,8 @@ function App() {
           <Route exact path="/mypost/:currentEmail" component={MyPost} />
           <Route exact path="/myfollow/:currentEmail" component={MyFollow} />
           {/* <Route exact path="/post/:id" component={PostDetail} /> */}
+          {/* <Route path="/chat" component={ChatApp} /> */}
+          <Route exact path="/chat/:email" component={ChatApp} />
           <Route exact path="/chat" component={ChatApp} />
           <Route exact path="/post/:id" component={Post} />
         </div>
