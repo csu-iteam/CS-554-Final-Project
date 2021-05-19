@@ -9,7 +9,6 @@ function convertImageToBase64(fileName) {
     const data = fs.readFileSync(`.\/tasks\/images\/${fileName}`, 'binary');
     const buffer = new Buffer.from(data, 'binary');
     let imagebase64 = 'data: image/' + getImageType(fileName) + ';base64,' + buffer.toString('base64');
-    console.log('x')
     return imagebase64;
 }
 
