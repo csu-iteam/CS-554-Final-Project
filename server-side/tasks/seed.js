@@ -69,7 +69,7 @@ async function main() {
     '$500'
   );
   
-  imageBase64 = imageConvert.convertImageToBase64('iphone12.jpg');
+  imageBase64 = imageConvert.convertImageToBase64('iPhone12.png');
   imgId = await data.images.insertImage(imageBase64);
   await posts.addPost(
     user1_Id,
@@ -80,7 +80,7 @@ async function main() {
     '$800'
   );
 
-  imageBase64 = imageConvert.convertImageToBase64('ipad.jpg');
+  imageBase64 = imageConvert.convertImageToBase64('ipad.png');
   imgId = await data.images.insertImage(imageBase64);
   await posts.addPost(
     user1_Id,
