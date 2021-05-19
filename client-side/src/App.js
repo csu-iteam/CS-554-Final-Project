@@ -43,6 +43,7 @@ function App() {
           <h1 className='website-title'>
             Secondary Market
         </h1>
+        <h2 hidden>prevent h1 to h3 without h2</h2>
           <div className="home-btn">
             <Link className="showlink" to="/">
               Home

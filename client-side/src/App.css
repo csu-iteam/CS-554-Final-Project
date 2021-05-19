@@ -7,7 +7,10 @@
 	margin-left: auto;
 	margin-right: auto;
 	width: 30%;
+}
 
+.hint {
+	font-size: 13px;
 }
 
 .App-logo {
@@ -144,7 +147,6 @@ dd {
 	font-weight: bold;
 }
 
-.home-btn{
+.home-btn {
 	float: left;
 }
-

@@ -1,4 +1,4 @@
-# Secondary market(temporary name)
+# Secondary market
 
 ## Introduction
 As we found in the group chat of Stevens students, the demand of second-hand transactions is quite high, especially for international students. When they come to the campus at the first time, many kinds of stuff like kitchenware, furniture and bicycles are needed. However, after their graduation, they might have to discard most of those stuff.  

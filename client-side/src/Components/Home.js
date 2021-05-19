@@ -52,6 +52,7 @@ const Home = () => {
     const [searchData, setSearchData] = useState(undefined);
     let card = null;
     let error = null;
+    let termSearch = null;
 
     //get data from database
     useEffect(() => {
@@ -72,6 +73,7 @@ const Home = () => {
 
     useEffect(() => {
         console.log('homepage type useEffect fired');
+        setSearchTerm('');
         async function fetchData() {
             try {
                 const { data } = await axios.get('http://localhost:3008/posts/tag/' + type,
@@ -204,6 +206,11 @@ const Home = () => {
             })
     }
 
+    if (type == 'all') {
+        termSearch = <Search searchValue={searchValue} />
+    } else
+        termSearch = null;
+
     if (loading) {
         return (
             <div>
@@ -213,12 +220,12 @@ const Home = () => {
     } else {
         return (
             <div>
-                <Search searchValue={searchValue} />
+                {termSearch}
                 <br />
                 {typeSelector}
 
-                <p className='center'>HINT: If use Term Search, make sure select "all" in tag; </p>
-                <p>If use Tag search, make sure term search is empty!</p>
+                <p className='center hint'>HINT: If you are using Term Search, Tag will be set to "All"; </p>
+                <p className='center hint'>If you change Tag Search from "All", your Term Search will be cleared and disabled!</p>
                 <br />
                 {error}
                 <Grid container className={classes.grid} spacing={5}>
