@@ -62,6 +62,9 @@ const useStyles = makeStyles({
     leftButton:{
         float: 'left',
         marginLeft:'5px'
+    },
+    tags:{
+        marginRight: '3px'
     }
 });
 
@@ -174,7 +177,7 @@ const Post = (props) => {
 
     function generateTag(tag) {
         return (
-            <Chip label={tag} color='primary' />
+            <Chip className={classes.tags} label={tag} color='primary' />
         );
     }
 
