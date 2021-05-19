@@ -25,7 +25,7 @@ const useStyles = makeStyles({
         flexDirection: 'row'
     },
     media: {
-        height: '100%',
+        height: 400,
         width: '100%'
     },
     formControl: {
@@ -206,7 +206,7 @@ const Home = () => {
             })
     }
 
-    if (type == 'all') {
+    if (type === 'all') {
         termSearch = <Search searchValue={searchValue} />
     } else
         termSearch = null;
