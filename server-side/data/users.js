@@ -6,7 +6,7 @@ const axios = require('axios');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto-js');
 const saltRounds = 10;
-const privateKey = "bb7a9a43-0fdf-45e0-808c-0a3904dba224";
+const privateKey = "08844dc7-e92c-4640-a3a1-b44d04d531ad";
 
 let exportedMethods = {
   async getAllUsers() {
@@ -29,15 +29,15 @@ let exportedMethods = {
     const userCollection = await users();
     const bcrypt_password = await bcrypt.hash(password, saltRounds);
     posts = [];
-    const newChatUserCreated = await this.addChatUser({ username: username, email: email, password: bcrypt_password});
-    if (!newChatUserCreated.id) throw 'Fail to create chat user';
+    // const newChatUserCreated = await this.addChatUser({ username: username, email: email, password: bcrypt_password});
+    // if (!newChatUserCreated.id) throw 'Fail to create chat user';
     let newUser = {
       username: username,
       email: email,
       password: bcrypt_password,
       _id: uuid(),
       posts: posts,
-      chatUserId: newChatUserCreated.id,
+      // chatUserId: newChatUserCreated.id,
       follows: []
     };
     const newInsertInformation = await userCollection.insertOne(newUser);
@@ -232,6 +232,13 @@ let exportedMethods = {
         'PRIVATE-KEY': privateKey
       }
     };
+    return await axios(config).then(res => {
+      return res.data;
+     })
+     .catch(err => {
+       console.log(err);
+       return false
+     });
   },
 }
 

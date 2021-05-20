@@ -58,6 +58,7 @@ class Profile extends Component {
         }
         
         if (usernameError.hidden === true && passwordError.hidden === true && passwordConfirmationError.hidden === true) {
+            let url = 'http://localhost:3008/users/' + this.state.userId;
             axios.put('http://localhost:3008/users/' + this.state.userId, {
                 "username": username.value,
                 "email": email.value,
@@ -83,6 +84,7 @@ class Profile extends Component {
     };
     render() {
         const { username, email, password } = this.state;
+        console.log(this.state);
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="center">
@@ -105,7 +107,7 @@ class Profile extends Component {
                     <input type="password" className="form-control" id="passwordConfirmation" defaultValue={password} name="passwordConfirmation" onChange={this.handleChange} /><div id="passwordConfirmationError" className="error" hidden></div>
                 </div>
                 <br />
-                <button type="submit" className="btn btn-primary">Update</button>
+                <button type="submit" className="btn btn-primary submit-button">Update</button>
             </form>
         );
     }

@@ -92,25 +92,25 @@ class Register extends Component {
             <form onSubmit={this.handleSubmit}>
                 <div className="center">
                     <label htmlFor="exampleInputEmail1">UserName</label>
-                    <input type="string" className="form-control" id="userName" defaultValue={username} name="username" onChange={this.handleChange} /><div id="usernameError" className="error" hidden></div>
+                    <input type="string" className="form-control" id="userName" defaultValue={username} name="username" onChange={this.handleChange} /><div id="usernameError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <div className="center">
                     <label htmlFor="exampleInputEmail1">Email address</label>
-                    <input type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} /><div id="emailError" className="error" hidden></div>
+                    <input type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} /><div id="emailError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <div className="center">
                     <label htmlFor="exampleInputPassword1">Password</label>
-                    <input type="password" className="form-control" id="password" defaultValue={password} name="password" onChange={this.handleChange} /><div id="passwordError" className="error" hidden></div>
+                    <input type="password" className="form-control" id="password" defaultValue={password} name="password" onChange={this.handleChange} /><div id="passwordError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <div className="center">
                     <label htmlFor="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" className="form-control" id="passwordConfirmation" defaultValue={passwordConfirmation} name="passwordConfirmation" onChange={this.handleChange} /><div id="passwordConfirmationError" className="error" hidden></div>
+                    <input type="password" className="form-control" id="passwordConfirmation" defaultValue={passwordConfirmation} name="passwordConfirmation" onChange={this.handleChange} /><div id="passwordConfirmationError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
-                <button type="submit" className="btn btn-primary">Sign up</button>
+                <button type="submit" className="btn btn-primary submit-button">Sign up</button>
             </form>
         );
     }
