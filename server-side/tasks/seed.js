@@ -27,14 +27,6 @@ const post = {
 
 async function main() {
   const db = await dbConnection();
-  // let chatUser1 = await users.getUserByEmail('1@stevens.edu'); console.log('here',chatUser1); if (chatUser1) await users.deleteChatUser(chatUser1.chatUserId);
-  
-  // let chatUser2 = await users.getUserByEmail('2@stevens.edu'); if (chatUser2) await users.deleteChatUser(chatUser1.chatUserId);
-  // console.log(chatUser2);
-  // let chatUser3 = await users.getUserByEmail('3@stevens.edu'); if (chatUser3) await users.deleteChatUser(chatUser1.chatUserId);
-  // let chatUser4 = await users.getUserByEmail('4@stevens.edu'); if (chatUser4) await users.deleteChatUser(chatUser1.chatUserId);
-  // let chatUser5 = await users.getUserByEmail('5@stevens.edu'); if (chatUser5) await users.deleteChatUser(chatUser1.chatUserId);
-
   await db.dropDatabase();
 
   let user1 = await users.addUser('Jingwei', '1@stevens.edu', '12345678');
