@@ -188,7 +188,7 @@ class MakeNewPost extends Component {
                         Update Image      
                         <br />
                         <br />
-                        <button type="submit" id="postImg" className="btn btn-primary" hidden>Upload IMG</button>
+                        <button type="submit" id="postImg" className="btn btn-primary submit-button" hidden>Upload IMG</button>
                         <input type="file" id="file_input" />
                         <div id="imgError" className="nothing-in-this-type" hidden></div>
                     </label>
@@ -196,7 +196,7 @@ class MakeNewPost extends Component {
                 
 
                 <br />
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary submit-button">Submit</button>
             </form>
         );
     }

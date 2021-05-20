@@ -107,7 +107,7 @@ class Profile extends Component {
                     <input type="password" className="form-control" id="passwordConfirmation" defaultValue={password} name="passwordConfirmation" onChange={this.handleChange} /><div id="passwordConfirmationError" className="error" hidden></div>
                 </div>
                 <br />
-                <button type="submit" className="btn btn-primary">Update</button>
+                <button type="submit" className="btn btn-primary submit-button">Update</button>
             </form>
         );
     }

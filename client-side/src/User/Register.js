@@ -110,7 +110,7 @@ class Register extends Component {
                     <input type="password" className="form-control" id="passwordConfirmation" defaultValue={passwordConfirmation} name="passwordConfirmation" onChange={this.handleChange} /><div id="passwordConfirmationError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
-                <button type="submit" className="btn btn-primary">Sign up</button>
+                <button type="submit" className="btn btn-primary submit-button">Sign up</button>
             </form>
         );
     }

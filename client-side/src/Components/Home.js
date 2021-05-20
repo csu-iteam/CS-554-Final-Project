@@ -121,7 +121,7 @@ const Home = () => {
     const typeSelector = (
         <div>
             <FormControl className={classes.formControl}>
-                <InputLabel id="demo-controlled-open-select-label" className={classes.inputLabel}>Tag Search</InputLabel>
+                <InputLabel id="demo-controlled-open-select-label" className={classes.inputLabel} for="demo-controlled-open-select">Tag Search</InputLabel>
                 <Select
                     labelId="demo-controlled-open-select-label"
                     id="demo-controlled-open-select"
