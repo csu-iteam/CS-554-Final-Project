@@ -97,7 +97,7 @@ function App() {
           {/* <Route path="/chat" component={ChatApp} /> */}
           <Route exact path="/chat/:email" component={ChatApp} />
           <Route exact path="/chat" component={ChatApp} />
-          <Route exact path="/post/:id" component={Post} />
+          <Route exact path="/post/:id/:oripage" component={Post} />
         </div>
       </div>
     </Router>

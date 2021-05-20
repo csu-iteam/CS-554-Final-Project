@@ -184,12 +184,12 @@ class MakeNewPost extends Component {
                 <br />
                 {/* <p>todo  img</p> */}
                 <div className="center">
-                    <label for="post-img" class="postInput">
+                    <label htmlFor="post-img" className="postInput">
                         Update Image      
                         <br />
                         <br />
                         <button type="submit" id="postImg" className="btn btn-primary" hidden>Upload IMG</button>
-                        <input type="file" id="file_input" multiple />
+                        <input type="file" id="file_input" />
                         <div id="imgError" className="nothing-in-this-type" hidden></div>
                     </label>
                 </div>

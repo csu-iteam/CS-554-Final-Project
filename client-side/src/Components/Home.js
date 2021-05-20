@@ -25,7 +25,7 @@ const useStyles = makeStyles({
         flexDirection: 'row'
     },
     media: {
-        height: '100%',
+        height: 400,
         width: '100%'
     },
     formControl: {
@@ -149,7 +149,7 @@ const Home = () => {
             <Grid item xs={10} sm={8} md={4} lg={3} xl={2} key={post._id}>
                 <Card className={classes.card} variant='outlined'>
                     <CardActionArea>
-                        <Link to={`/post/${post._id}`}>
+                        <Link to={`/post/${post._id}/home`}>
                             <CardMedia
                                 className={classes.media}
                                 component='img'
@@ -161,13 +161,13 @@ const Home = () => {
                                 <Typography className={classes.titleHead} gutterBottom variant='h6' component='h3'>
                                     {post.title}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Price: {post.price}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Seller: {post.userWhoPost.name}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Release Time: {post.time}
                                 </Typography>
                             </CardContent>
@@ -206,7 +206,7 @@ const Home = () => {
             })
     }
 
-    if (type == 'all') {
+    if (type === 'all') {
         termSearch = <Search searchValue={searchValue} />
     } else
         termSearch = null;

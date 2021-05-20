@@ -58,6 +58,13 @@ const useStyles = makeStyles({
     followButton: {
         float: 'right',
         marginLeft:'5px'
+    },
+    leftButton:{
+        float: 'left',
+        marginLeft:'5px'
+    },
+    tags:{
+        marginRight: '3px'
     }
 });
 
@@ -68,17 +75,20 @@ const Post = (props) => {
     const [badRequest, setBadRequest] = useState(false);
     const [followState, setFollowState] = useState(0);//0 seller 1 unfollow 2 follow
     const [soldState, setSoldState] = useState(undefined);
+    const [oripageState,setOripage] =useState(undefined);
     const classes = useStyles();
     let followButton = "";
     let contactButton = "";
     let soldButton = "";
     let soldSignal="";
+    let backButton="";
 
     useEffect(() => {
         console.log('useEffect fired item');
         async function fetchData() {
             try {
                 let id = props.match.params.id;
+                setOripage(props.match.params.oripage);
                 // let reg = /^[0-9]*[0-9][0-9]*$/;
                 //!reg.test(id)
                 if (false) {
@@ -167,7 +177,7 @@ const Post = (props) => {
 
     function generateTag(tag) {
         return (
-            <Chip label={tag} color='primary' />
+            <Chip className={classes.tags} label={tag} color='primary' />
         );
     }
 
@@ -191,18 +201,18 @@ const Post = (props) => {
 
     function generateFollow(userId, current_post) {
         if (isSeller(userId, current_post)) {
-            contactButton = <Button variant="contained" color='primary' hidden>contact yourself</Button>;
+            contactButton = <Button className={classes.followButton} variant="contained" color='primary' hidden>contact yourself</Button>;
             return (
                 <Button className={classes.followButton} variant="contained" disabled color="secondary">You are the seller</Button>
             );
         }
         else if (isFollowed(userId, current_post)) {
-            contactButton = <Link to={"/chat/" + postData.userWhoPost.email}><Button variant="contained" color='primary'>Contact with him/her</Button></Link>
+            contactButton = <Link to={"/chat/" + postData.userWhoPost.email}><Button className={classes.followButton} variant="contained" color='primary'>Contact with him/her</Button></Link>
             return (
                 <Button className={classes.followButton} variant="contained" color="primary" startIcon={<StarIcon />} onClick={() => { setFollowState(2) }}>Cancel Follow</Button>
             );
         } else {
-            contactButton = <Link to={"/chat/" + postData.userWhoPost.email}><Button variant="contained" color='primary'>Contact with him/her</Button></Link>
+            contactButton = <Link to={"/chat/" + postData.userWhoPost.email}><Button className={classes.followButton} variant="contained" color='primary'>Contact with him/her</Button></Link>
             return (
                 <Button className={classes.followButton} variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={() => { setFollowState(1) }}>Follow</Button>
             );
@@ -230,6 +240,14 @@ const Post = (props) => {
 
     if (postData && postData.userWhoPost) {
         followButton = generateFollow(cookie.load('current_id'), postData);
+    }
+
+    if(oripageState==='home'){
+        backButton=(<Button className={classes.leftButton} variant="contained" color="primary" href="/">Back</Button>)
+    }else if(oripageState==='mypost'){
+        backButton=(<Button className={classes.leftButton} variant="contained" color="primary" href={`/mypost/${cookie.load('current_email')}`}>Back</Button>)
+    }else if(oripageState==='myfollow'){
+        backButton=(<Button className={classes.leftButton} variant="contained" color="primary" href={`/myfollow/${cookie.load('current_email')}`}>Back</Button>)
     }
 
     if (loading) {
@@ -279,6 +297,7 @@ const Post = (props) => {
                     <Typography className={classes.secondary_container}>
                         <label className={classes.secondary_title}>Email:</label>{postData.userWhoPost.email}
                     </Typography>
+                    {backButton}
                     {contactButton}
                     {soldButton}
                 </CardContent>

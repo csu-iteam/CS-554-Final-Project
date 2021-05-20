@@ -276,7 +276,8 @@ const exportedMethods = {
       img: img,
       price: price,
       time: timenow,
-      sold: false
+      sold: false,
+      followers: []
     }
     try {
       const newInsertInformation = await postCollection.insertOne(newTempPost);

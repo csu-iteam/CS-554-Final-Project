@@ -80,7 +80,7 @@ const MyPost = (props) => {
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={post._id}>
                 <Card className={classes.card} variant='outlined'>
                     <CardActionArea>
-                        <Link to={`/post/${post._id}`}>
+                        <Link to={`/post/${post._id}/mypost`}>
                         <CardMedia
                                 className={classes.media}
                                 component='img'
@@ -92,13 +92,13 @@ const MyPost = (props) => {
                                 <Typography className={classes.titleHead} gutterBottom variant='h6' component='h3'>
                                     {post.title}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Price: {post.price}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Seller: {post.userWhoPost.name}
                                 </Typography>
-                                <Typography variant='body3' color='textSecondary' component='p'>
+                                <Typography variant='body2' color='textSecondary' component='p'>
                                     Release Time: {post.time}
                                 </Typography>
                             </CardContent>

@@ -80,7 +80,7 @@ const MyFollow = (props) => {
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={post._id}>
                 <Card className={classes.card} variant='outlined'>
                     <CardActionArea>
-                        <Link to={`/post/${post._id}`}>
+                        <Link to={`/post/${post._id}/myfollow`}>
                         <CardMedia
                                 className={classes.media}
                                 component='img'
