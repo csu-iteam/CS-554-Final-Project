@@ -90,6 +90,10 @@ td {
 	border: 2px solid white;
 }
 
+.registerLink:hover {
+	color: #343a40 !important;
+}
+
 li {
 	list-style-type: none;
 }
@@ -153,6 +157,6 @@ dd {
 	float: left;
 }
 
-.submit-button{
+.submit-button {
 	background-color: #0072ee !important;
 }
