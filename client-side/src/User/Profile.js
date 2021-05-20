@@ -58,7 +58,6 @@ class Profile extends Component {
         }
         
         if (usernameError.hidden === true && passwordError.hidden === true && passwordConfirmationError.hidden === true) {
-            let url = 'http://localhost:3008/users/' + this.state.userId;
             axios.put('http://localhost:3008/users/' + this.state.userId, {
                 "username": username.value,
                 "email": email.value,
@@ -88,22 +87,22 @@ class Profile extends Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="center">
-                    <label htmlFor="exampleInputEmail1">UserName</label>
+                    <label htmlFor="exampleInputEmail1" for="userName" >UserName</label>
                     <input type="string" className="form-control" id="userName" defaultValue={username} name="username" onChange={this.handleChange} /><div id="usernameError" className="error" hidden></div>
                 </div>
                 <br />
                 <div className="center">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
+                    <label htmlFor="exampleInputEmail1" for="email">Email address</label>
                     <input readOnly="readonly" type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} />
                 </div>
                 <br />
                 <div className="center">
-                    <label htmlFor="exampleInputPassword1">Password</label>
+                    <label htmlFor="exampleInputPassword1" for="password">Password</label>
                     <input type="password" className="form-control" id="password" defaultValue={password} name="password" onChange={this.handleChange} /><div id="passwordError" className="error" hidden></div>
                 </div>
                 <br />
                 <div className="center">
-                    <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                    <label htmlFor="exampleInputPassword1" for="passwordConfirmation">Confirm Password</label>
                     <input type="password" className="form-control" id="passwordConfirmation" defaultValue={password} name="passwordConfirmation" onChange={this.handleChange} /><div id="passwordConfirmationError" className="error" hidden></div>
                 </div>
                 <br />

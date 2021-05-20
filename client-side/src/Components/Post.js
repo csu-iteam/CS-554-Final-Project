@@ -111,10 +111,10 @@ const Post = (props) => {
 
     useEffect(() => {
         async function changeFollowState(userId, posrtId) {
-            if (followState == 1) {
+            if (followState === 1) {
                 await axios.get(`http://localhost:3008/posts/follow/${userId}/${posrtId}`);
                 //followButton = <Button variant="contained" color="primary" startIcon={<StarIcon />} onClick={setFollowState(2)}>Cancel Follow</Button>
-            } else if (followState == 2) {
+            } else if (followState === 2) {
                 await axios.get(`http://localhost:3008/posts/unFollow/${userId}/${posrtId}`);
                 //followButton = <Button variant="outlined" color="primary" startIcon={<StarOutIcon />} onClick={setFollowState(1)}>Follow</Button>
             }
@@ -186,7 +186,7 @@ const Post = (props) => {
     });
     // let tags='';
     function isSeller(userId, current_post) {
-        if (userId == current_post.userWhoPost.id) return true;
+        if (userId === current_post.userWhoPost.id) return true;
         else return false;
     }
 
@@ -194,7 +194,7 @@ const Post = (props) => {
         if (!current_post.followers) return false;
         let followers = current_post.followers;
         for (let i = 0; i < followers.length; i++) {
-            if (userId == followers[i]) return true;
+            if (userId === followers[i]) return true;
         }
         return false;
     }

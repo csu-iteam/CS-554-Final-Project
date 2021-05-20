@@ -44,10 +44,10 @@ class Register extends Component {
         if (!password.value) {
             passwordError.hidden = false;
             passwordError.innerHTML = 'Please enter valid password.';
-        } else if(password.value.length < 8){
+        } else if (password.value.length < 8) {
             passwordError.hidden = false;
             passwordError.innerHTML = 'The length of password should be at least 8.';
-        }else{
+        } else {
             passwordError.hidden = true;
         }
 
@@ -60,24 +60,24 @@ class Register extends Component {
         } else {
             passwordConfirmationError.hidden = true;
         }
-        
+
         if (usernameError.hidden === true && emailError.hidden === true && passwordError.hidden === true && passwordConfirmationError.hidden === true) {
             axios.post('http://localhost:3008/users/register', {
                 "username": username.value,
                 "email": email.value,
                 "password": password.value
             })
-            .then(function (response) {
-                console.log("response: ", response);
-                if(response.status === 200){
-                    alert('Congratulations, successful registration!');
-                    window.location.href = "/login";
-                }
-            })
-            .catch(err => {
-                alert("The email address input has been registered.");
-                window.location.href = "/register";
-            })
+                .then(function (response) {
+                    console.log("response: ", response);
+                    if (response.status === 200) {
+                        alert('Congratulations, successful registration!');
+                        window.location.href = "/login";
+                    }
+                })
+                .catch(err => {
+                    alert("The email address input has been registered.");
+                    window.location.href = "/register";
+                })
         }
     }
 
@@ -91,22 +91,22 @@ class Register extends Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="center">
-                    <label htmlFor="exampleInputEmail1">UserName</label>
+                    <label htmlFor="exampleInputEmail1" for="userName">UserName</label>
                     <input type="string" className="form-control" id="userName" defaultValue={username} name="username" onChange={this.handleChange} /><div id="usernameError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <div className="center">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
+                    <label htmlFor="exampleInputEmail1" for="email">Email address</label>
                     <input type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} /><div id="emailError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <div className="center">
-                    <label htmlFor="exampleInputPassword1">Password</label>
+                    <label htmlFor="exampleInputPassword1" for="password">Password</label>
                     <input type="password" className="form-control" id="password" defaultValue={password} name="password" onChange={this.handleChange} /><div id="passwordError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <div className="center">
-                    <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                    <label htmlFor="exampleInputPassword1" for="passwordConfirmation">Confirm Password</label>
                     <input type="password" className="form-control" id="passwordConfirmation" defaultValue={passwordConfirmation} name="passwordConfirmation" onChange={this.handleChange} /><div id="passwordConfirmationError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />

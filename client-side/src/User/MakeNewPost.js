@@ -165,26 +165,26 @@ class MakeNewPost extends Component {
                 <br />
                 <br />
                 <div className="center">
-                    <label htmlFor="example2">Title</label>
+                    <label htmlFor="example2" for="title">Title</label>
                     <input type="string" className="form-control" id="title" defaultValue={title} name="title" onChange={this.handleChange} /><div id="titleError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <br />
                 <div className="center">
-                    <label htmlFor="example3">Discription</label>
+                    <label htmlFor="example3" for="discription">Discription</label>
                     <input type="string" className="form-control" id="discription" defaultValue={discription} name="discription" onChange={this.handleChange} /><div id="discriptionError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <br />
                 <div className="center">
-                    <label htmlFor="example4">Price</label>
+                    <label htmlFor="example4" for="price">Price</label>
                     <input type="string" className="form-control" id="price" defaultValue={price} name="price" onChange={this.handleChange} /><div id="priceError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <br />
                 {/* <p>todo  img</p> */}
                 <div className="center">
-                    <label htmlFor="post-img" className="postInput">
+                    <label htmlFor="post-img" className="postInput" for="file_input">
                         Update Image      
                         <br />
                         <br />
