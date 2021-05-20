@@ -7,7 +7,7 @@ const saltRounds = 10;
 const userData = data.users;
 
 
-router.get('/chat/:email', async (req, res) => {
+router.get('/:email', async (req, res) => {
     const email = req.params.email;
     try {
         let user = await userData.getUserByEmail(email);
