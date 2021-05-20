@@ -29,15 +29,15 @@ let exportedMethods = {
     const userCollection = await users();
     const bcrypt_password = await bcrypt.hash(password, saltRounds);
     posts = [];
-    // const newChatUserCreated = await this.addChatUser({ username: username, email: email, password: bcrypt_password});
-    // if (!newChatUserCreated.id) throw 'Fail to create chat user';
+    const newChatUserCreated = await this.addChatUser({ username: username, email: email, password: bcrypt_password});
+    if (!newChatUserCreated.id) throw 'Fail to create chat user';
     let newUser = {
       username: username,
       email: email,
       password: bcrypt_password,
       _id: uuid(),
       posts: posts,
-      // chatUserId: newChatUserCreated.id,
+      chatUserId: newChatUserCreated.id,
       follows: []
     };
     const newInsertInformation = await userCollection.insertOne(newUser);
