@@ -18,6 +18,8 @@ This project is separate into client-side and server-side, you need `cd` into bo
 ### Start redis
 This web application need redis, make sure you have set up redis on your device, if not: https://redis.io/download
 After redis installed, go into your command line and `cd` into your redis path, do: `redis-server`; then start another cmd, do: `redis-cli`. 
+### Seed
+To add sample data to the database, you need to switch to the `./server-side` directory and run `node ./tasks/seed.js`
 ### Run
 Like you did for installation, you need run both client-side and server-side with:
 `npm start`,
