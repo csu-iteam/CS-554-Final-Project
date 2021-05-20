@@ -83,12 +83,12 @@ class Login extends Component {
             <form onSubmit={this.handleSubmit}>
                 <div className="center">
                     <label htmlFor="exampleInputEmail1">Email address</label>
-                    <input type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} /><div id="emailError" className="error" hidden></div>
+                    <input type="string" className="form-control" id="email" defaultValue={email} name="email" onChange={this.handleChange} /><div id="emailError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <div className="center">
                     <label htmlFor="exampleInputPassword1">Password</label>
-                    <input type="password" className="form-control" id="password" defaultValue={password} name="password" onChange={this.handleChange} /><div id="passwordError" className="error" hidden></div>
+                    <input type="password" className="form-control" id="password" defaultValue={password} name="password" onChange={this.handleChange} /><div id="passwordError" className="nothing-in-this-type" hidden></div>
                 </div>
                 <br />
                 <button type="submit" className="btn btn-primary">Sign in</button> <Link className="showlink" to="/register">
