@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redis:latest
+    
+  secondary:
+    image: secondary
+    build:
+      context: server-side
+      dockerfile: ./Dockerfile
+    ports:
+      - 3008:3008
+    links:
+      - redis

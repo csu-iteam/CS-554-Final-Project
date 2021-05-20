@@ -6,6 +6,10 @@ const imageData = data.images;
 const bluebird = require('bluebird');
 const redis = require('redis');
 const e = require('express');
+
+// //if you need docker to run the server plz uncomment this line
+// const client = redis.createClient(6379, 'redis');
+// //and comment the line below
 const client = redis.createClient();
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
